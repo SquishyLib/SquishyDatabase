@@ -7,7 +7,7 @@ public enum DatabaseFactory {
     SQLITE {
         @Override
         public Database create(DatabaseCredentials databaseCredentials) {
-            return new SqliteDatabase().setup(databaseCredentials);
+            return SqliteDatabase.extract(databaseCredentials).setup();
         }
     };
 

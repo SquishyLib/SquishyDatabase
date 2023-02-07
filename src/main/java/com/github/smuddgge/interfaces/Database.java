@@ -16,10 +16,9 @@ public interface Database {
     /**
      * Used to set up the database.
      *
-     * @param databaseCredentials The given database credentials.
      * @return The instance of the database.
      */
-    @NotNull Database setup(@NotNull DatabaseCredentials databaseCredentials);
+    @NotNull Database setup();
 
     /**
      * Used to create a table in the database.
