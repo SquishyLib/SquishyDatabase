@@ -3,15 +3,13 @@ package com.github.smuddgge.implementation.sqlite;
 import com.github.smuddgge.DatabaseCredentials;
 import com.github.smuddgge.errors.IncorrectDatabaseCredentials;
 import com.github.smuddgge.interfaces.Database;
-import com.github.smuddgge.interfaces.Record;
+import com.github.smuddgge.record.Record;
 import com.github.smuddgge.interfaces.Table;
 import com.github.smuddgge.interfaces.TableSelection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.List;
 
 public class SqliteDatabase extends AbstractSqliteDatabase {
@@ -27,6 +25,9 @@ public class SqliteDatabase extends AbstractSqliteDatabase {
 
     @Override
     public @NotNull Database setup() {
+        // Initiate Drivers
+        this.initiateDrivers();
+
         // Create the directory.
         this.createDirectory();
 
@@ -35,7 +36,6 @@ public class SqliteDatabase extends AbstractSqliteDatabase {
 
         // Create database connection.
         this.createConnection(url);
-
         return this;
     }
 
@@ -45,10 +45,7 @@ public class SqliteDatabase extends AbstractSqliteDatabase {
         table.link(this);
 
         // Create the statement.
-        StringBuilder statement = new StringBuilder();
-
-        // Create the table if it does not exist.
-        statement.append("CREATE TABLE IF NOT EXISTS `").append(table.getName()).append("` (");
+        String statement = this.getCreateTableStatement(table);
 
         return false;
     }

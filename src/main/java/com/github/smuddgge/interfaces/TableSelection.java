@@ -1,5 +1,6 @@
 package com.github.smuddgge.interfaces;
 
+import com.github.smuddgge.record.Record;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

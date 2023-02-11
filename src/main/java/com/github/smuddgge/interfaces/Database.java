@@ -1,6 +1,6 @@
 package com.github.smuddgge.interfaces;
 
-import com.github.smuddgge.DatabaseCredentials;
+import com.github.smuddgge.record.Record;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

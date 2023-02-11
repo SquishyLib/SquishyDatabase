@@ -1,7 +1,7 @@
 package com.github.smuddgge.implementation.sqlite;
 
 import com.github.smuddgge.interfaces.Query;
-import com.github.smuddgge.interfaces.Record;
+import com.github.smuddgge.record.Record;
 import com.github.smuddgge.interfaces.TableSelection;
 import org.jetbrains.annotations.NotNull;
 

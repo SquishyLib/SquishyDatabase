@@ -13,7 +13,7 @@ public class MainTesting {
         Database database = databaseFactory.create(new DatabaseCredentials().setPath("src/test/resources/database.sqlite3"));
 
         // Create a new table
-        CustomerTable<Customer> customerTable = new CustomerTable<>();
+        CustomerTable customerTable = new CustomerTable();
         database.createTable(customerTable);
     }
 }

@@ -2,6 +2,11 @@ package com.github.smuddgge.implementation.sqlite;
 
 import com.github.smuddgge.interfaces.AbstractDatabase;
 import com.github.smuddgge.interfaces.Database;
+import com.github.smuddgge.interfaces.Table;
+import com.github.smuddgge.record.Record;
+import com.github.smuddgge.record.RecordField;
+import com.github.smuddgge.record.RecordFieldType;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.sql.Connection;
@@ -45,6 +50,7 @@ public abstract class AbstractSqliteDatabase extends AbstractDatabase {
 
     /**
      * Used to create a connection to the database.
+     *
      * @param url The database url.
      */
     protected void createConnection(String url) {
@@ -55,6 +61,90 @@ public abstract class AbstractSqliteDatabase extends AbstractDatabase {
         } catch (SQLException exception) {
             exception.printStackTrace();
             this.setDisable();
+        }
+    }
+
+    /**
+     * Used to get a create table statement.
+     *
+     * @param table The table to get the statement for.
+     */
+    protected String getCreateTableStatement(Table<?> table) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        // Create the table if it does not exist.
+        // Add the table name.
+        stringBuilder.append("CREATE TABLE IF NOT EXISTS `").append(table.getName()).append("` (");
+
+        // Create a new record.
+        Record record = table.createRecord();
+
+        // Loop though primary keys.
+        for (RecordField recordField : record.getFieldList(RecordFieldType.PRIMARY)) {
+            String type = this.parseType(recordField.getValueType());
+
+            if (type == null) continue;
+
+            stringBuilder.append("`{key}` {type} PRIMARY KEY,"
+                    .replace("{key}", recordField.getKey())
+                    .replace("{type}", type));
+        }
+
+        // Loop though default fields.
+        for (RecordField recordField : record.getFieldList(RecordFieldType.FIELD)) {
+            String type = this.parseType(recordField.getValueType());
+
+            if (type == null) continue;
+
+            stringBuilder.append("`{key}` {type},"
+                    .replace("{key}", recordField.getKey())
+                    .replace("{type}", type));
+        }
+
+        // Loop though foreign keys.
+        for (RecordField recordField : record.getFieldList(RecordFieldType.FOREIGN)) {
+            String type = this.parseType(recordField.getValueType());
+
+            if (type == null) continue;
+
+            stringBuilder.append("`{key}` {type},"
+                    .replace("{key}", recordField.getKey())
+                    .replace("{type}", type));
+        }
+
+        return stringBuilder.toString();
+    }
+
+    /**
+     * Used to get a string value that represents the
+     * record fields type.
+     *
+     * @param clazz The fields value type.
+     * @return The instance of the string that
+     * can be used in this database.
+     */
+    protected @Nullable String parseType(Class<?> clazz) {
+        if (clazz.isAssignableFrom(String.class)) return "TEXT";
+        if (clazz.isAssignableFrom(Integer.class)) return "INTEGER";
+        return null;
+    }
+
+    /**
+     * Used to execute a statement.
+     *
+     * @param statement The statement to execute.
+     * @return True if successful.
+     */
+    public boolean executeStatement(String statement) {
+        if (this.isDisabled()) return false;
+
+        try {
+            // Execute the statement.
+            return connection.createStatement().execute(statement);
+
+        } catch (SQLException exception) {
+            this.setDisable();
+            return false;
         }
     }
 }
