@@ -1,11 +1,14 @@
 package com.github.smuddgge.implementation.sqlite;
 
+import com.github.smuddgge.errors.ForeignKeyReferenceException;
 import com.github.smuddgge.interfaces.AbstractDatabase;
 import com.github.smuddgge.interfaces.Database;
 import com.github.smuddgge.interfaces.Table;
+import com.github.smuddgge.record.ForeignKeyAnnotation;
 import com.github.smuddgge.record.Record;
 import com.github.smuddgge.record.RecordField;
 import com.github.smuddgge.record.RecordFieldType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -53,7 +56,7 @@ public abstract class AbstractSqliteDatabase extends AbstractDatabase {
      *
      * @param url The database url.
      */
-    protected void createConnection(String url) {
+    protected void createConnection(@NotNull String url) {
         try {
             // Create a connection
             this.connection = DriverManager.getConnection(url);
@@ -69,7 +72,7 @@ public abstract class AbstractSqliteDatabase extends AbstractDatabase {
      *
      * @param table The table to get the statement for.
      */
-    protected String getCreateTableStatement(Table<?> table) {
+    protected @NotNull String getCreateTableStatement(@NotNull Table<?> table) {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Create the table if it does not exist.
@@ -85,9 +88,7 @@ public abstract class AbstractSqliteDatabase extends AbstractDatabase {
 
             if (type == null) continue;
 
-            stringBuilder.append("`{key}` {type} PRIMARY KEY,"
-                    .replace("{key}", recordField.getKey())
-                    .replace("{type}", type));
+            stringBuilder.append("`{key}` {type} PRIMARY KEY,".replace("{key}", recordField.getKey()).replace("{type}", type));
         }
 
         // Loop though default fields.
@@ -96,9 +97,7 @@ public abstract class AbstractSqliteDatabase extends AbstractDatabase {
 
             if (type == null) continue;
 
-            stringBuilder.append("`{key}` {type},"
-                    .replace("{key}", recordField.getKey())
-                    .replace("{type}", type));
+            stringBuilder.append("`{key}` {type},".replace("{key}", recordField.getKey()).replace("{type}", type));
         }
 
         // Loop though foreign keys.
@@ -107,10 +106,16 @@ public abstract class AbstractSqliteDatabase extends AbstractDatabase {
 
             if (type == null) continue;
 
-            stringBuilder.append("`{key}` {type},"
-                    .replace("{key}", recordField.getKey())
-                    .replace("{type}", type));
+            ForeignKeyAnnotation foreignKeyAnnotation = recordField.getForeignKeyReference();
+            if (foreignKeyAnnotation == null) {
+                throw new ForeignKeyReferenceException(table.getName(), recordField.getKey());
+            }
+
+            stringBuilder.append("`{key}` {type} FOREIGN KEY REFERENCES {reference}({reference_field}),".replace("{key}", recordField.getKey()).replace("{type}", type).replace("{reference}", foreignKeyAnnotation.table()).replace("{reference_key}", foreignKeyAnnotation.field()));
         }
+
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        stringBuilder.append(");");
 
         return stringBuilder.toString();
     }
@@ -123,7 +128,7 @@ public abstract class AbstractSqliteDatabase extends AbstractDatabase {
      * @return The instance of the string that
      * can be used in this database.
      */
-    protected @Nullable String parseType(Class<?> clazz) {
+    protected @Nullable String parseType(@NotNull Class<?> clazz) {
         if (clazz.isAssignableFrom(String.class)) return "TEXT";
         if (clazz.isAssignableFrom(Integer.class)) return "INTEGER";
         return null;
@@ -135,7 +140,7 @@ public abstract class AbstractSqliteDatabase extends AbstractDatabase {
      * @param statement The statement to execute.
      * @return True if successful.
      */
-    public boolean executeStatement(String statement) {
+    public boolean executeStatement(@NotNull String statement) {
         if (this.isDisabled()) return false;
 
         try {

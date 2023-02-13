@@ -1,7 +1,7 @@
 package com.github.smuddgge.implementation.sqlite;
 
 import com.github.smuddgge.DatabaseCredentials;
-import com.github.smuddgge.errors.IncorrectDatabaseCredentials;
+import com.github.smuddgge.errors.DatabaseCredentialsException;
 import com.github.smuddgge.interfaces.Database;
 import com.github.smuddgge.record.Record;
 import com.github.smuddgge.interfaces.Table;
@@ -100,6 +100,6 @@ public class SqliteDatabase extends AbstractSqliteDatabase {
 
         // If the incorrect credentials were given
         // throw an error.
-        throw new IncorrectDatabaseCredentials();
+        throw new DatabaseCredentialsException();
     }
 }

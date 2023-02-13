@@ -5,5 +5,5 @@ package com.github.smuddgge.errors;
  * This error occurs when the incorrect database credentials
  * are given.
  */
-public class IncorrectDatabaseCredentials extends RuntimeException {
+public class DatabaseCredentialsException extends RuntimeException {
 }

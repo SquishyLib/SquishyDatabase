@@ -16,6 +16,7 @@ public @interface RecordFieldAnnotation {
     /**
      * Used to set what type of field the field is.
      * This defaults to {@link RecordFieldType#FIELD}
+     *
      * @return The field type.
      */
     RecordFieldType type() default RecordFieldType.FIELD;

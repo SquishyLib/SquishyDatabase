@@ -5,8 +5,8 @@ package com.github.smuddgge.record;
  * This is used in a {@link RecordField} to determine
  * what the value represents in the database.
  * <li>
- *     A {@link RecordFieldType#FIELD} represents the
- *     default value.
+ * A {@link RecordFieldType#FIELD} represents the
+ * default value.
  * </li>
  */
 public enum RecordFieldType {

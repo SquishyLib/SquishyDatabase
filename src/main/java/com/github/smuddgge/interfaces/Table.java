@@ -1,13 +1,11 @@
 package com.github.smuddgge.interfaces;
 
+import com.github.smuddgge.errors.RecordCreationException;
 import com.github.smuddgge.record.Record;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.function.Supplier;
 
 /**
  * Represents a database table.
@@ -29,14 +27,15 @@ public abstract class Table<R extends Record> {
     public abstract @NotNull String getName();
 
     @SuppressWarnings("unchecked")
-    public R createRecord() {
+    public @NotNull R createRecord() {
         try {
             ParameterizedType parameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass();
             Class<R> clazz = (Class<R>) parameterizedType.getActualTypeArguments()[0];
             return clazz.newInstance();
+
         } catch (InstantiationException | IllegalAccessException exception) {
             exception.printStackTrace();
-            return null;
+            throw new RecordCreationException();
         }
     }
 
@@ -54,7 +53,7 @@ public abstract class Table<R extends Record> {
      *
      * @param database The database to link to.
      */
-    public void link(Database database) {
+    public void link(@NotNull Database database) {
         this.database = database;
     }
 

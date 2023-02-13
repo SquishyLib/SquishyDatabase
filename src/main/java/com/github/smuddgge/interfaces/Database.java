@@ -38,7 +38,7 @@ public interface Database {
      * @return The instance of the requested table
      * if it exists.
      */
-    <T, R extends Record> Table<R> getTable(@NotNull Class<T> instance);
+    @Nullable <T, R extends Record> Table<R> getTable(@NotNull Class<T> instance);
 
     /**
      * Used to get a table section from the database.

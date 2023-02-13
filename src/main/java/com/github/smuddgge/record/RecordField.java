@@ -1,5 +1,7 @@
 package com.github.smuddgge.record;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.lang.reflect.Field;
 
 /**
@@ -50,6 +52,17 @@ public record RecordField(Record record, Field field) {
     }
 
     /**
+     * Used to get the foreign key reference
+     * annotation.
+     *
+     * @return The requested reference.
+     * This will return null if there is no reference.
+     */
+    public @Nullable ForeignKeyAnnotation getForeignKeyReference() {
+        return this.field.getAnnotation(ForeignKeyAnnotation.class);
+    }
+
+    /**
      * Used to set the field value.
      *
      * @param value The value to set the field to.
@@ -76,6 +89,7 @@ public record RecordField(Record record, Field field) {
 
     /**
      * Used to check if the field should be ignored.
+     *
      * @return True if the field has {@link RecordFieldIgnoreAnnotation}
      */
     public boolean isIgnored() {
