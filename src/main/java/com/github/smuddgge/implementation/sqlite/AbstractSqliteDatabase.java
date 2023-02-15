@@ -1,9 +1,8 @@
 package com.github.smuddgge.implementation.sqlite;
 
 import com.github.smuddgge.errors.ForeignKeyReferenceException;
-import com.github.smuddgge.interfaces.AbstractDatabase;
 import com.github.smuddgge.interfaces.Database;
-import com.github.smuddgge.interfaces.Table;
+import com.github.smuddgge.interfaces.TableAdapter;
 import com.github.smuddgge.record.ForeignKeyAnnotation;
 import com.github.smuddgge.record.Record;
 import com.github.smuddgge.record.RecordField;
@@ -20,7 +19,7 @@ import java.sql.SQLException;
  * Represents methods not defined in the
  * {@link Database} implementation.
  */
-public abstract class AbstractSqliteDatabase extends AbstractDatabase {
+public abstract class AbstractSqliteDatabase extends Database {
 
     /**
      * The instance of the file.
@@ -72,7 +71,7 @@ public abstract class AbstractSqliteDatabase extends AbstractDatabase {
      *
      * @param table The table to get the statement for.
      */
-    protected @NotNull String getCreateTableStatement(@NotNull Table<?> table) {
+    protected @NotNull String getCreateTableStatement(@NotNull TableAdapter<?> table) {
         StringBuilder stringBuilder = new StringBuilder();
 
         // Create the table if it does not exist.

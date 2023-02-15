@@ -1,8 +1,10 @@
 package com.github.smuddgge;
 
-import com.github.smuddgge.Records.Customer;
 import com.github.smuddgge.Tables.CustomerTable;
 import com.github.smuddgge.interfaces.Database;
+import com.github.smuddgge.interfaces.TableAdapter;
+import com.github.smuddgge.record.Record;
+import org.jetbrains.annotations.Nullable;
 
 public class MainTesting {
 
@@ -15,5 +17,7 @@ public class MainTesting {
         // Create a new table
         CustomerTable customerTable = new CustomerTable();
         database.createTable(customerTable);
+
+        CustomerTable resultTable = database.getTable(CustomerTable.class);
     }
 }

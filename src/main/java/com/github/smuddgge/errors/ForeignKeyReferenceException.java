@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 public class ForeignKeyReferenceException extends RuntimeException {
 
     public ForeignKeyReferenceException(@NotNull String tableName, @NotNull String fieldName) {
-        super("Incorrect foreign key {table}.{field}"
+        super("Incorrect foreign key at {table}.{field}"
                 .replace("{table}", tableName)
                 .replace("{field}", fieldName)
         );

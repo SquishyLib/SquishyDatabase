@@ -13,7 +13,4 @@ public class Customer extends Record {
 
     @RecordFieldIgnoreAnnotation
     public Object dataStore;
-
-    @RecordFieldAnnotation(type = RecordFieldType.FOREIGN)
-    public String franchise;
 }

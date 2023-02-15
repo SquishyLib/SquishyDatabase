@@ -3,14 +3,12 @@ package com.github.smuddgge.implementation.sqlite;
 import com.github.smuddgge.DatabaseCredentials;
 import com.github.smuddgge.errors.DatabaseCredentialsException;
 import com.github.smuddgge.interfaces.Database;
-import com.github.smuddgge.record.Record;
-import com.github.smuddgge.interfaces.Table;
+import com.github.smuddgge.interfaces.TableAdapter;
 import com.github.smuddgge.interfaces.TableSelection;
+import com.github.smuddgge.record.Record;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.util.List;
 
 public class SqliteDatabase extends AbstractSqliteDatabase {
 
@@ -40,44 +38,21 @@ public class SqliteDatabase extends AbstractSqliteDatabase {
     }
 
     @Override
-    public boolean createTable(@NotNull Table<?> table) {
+    public boolean createTable(@NotNull TableAdapter<?> table) {
         // Link the table.
-        table.link(this);
+        this.linkTable(table);
 
         // Create the statement.
         String statement = this.getCreateTableStatement(table);
 
-        return false;
+        // Execute the statement.
+        return this.executeStatement(statement);
     }
 
     @Override
-    public <T, R extends Record> Table<R> getTable(@NotNull Class<T> instance) {
-        return null;
-    }
-
-    @Override
-    public @Nullable <R extends Record> TableSelection<R> getTable(@NotNull String name) {
-        return null;
-    }
-
-    @Override
-    public @NotNull List<TableSelection<?>> getTableList() {
-        return null;
-    }
-
-    @Override
-    public @NotNull List<String> getTableNameList() {
-        return null;
-    }
-
-    @Override
-    public boolean isDisabled() {
-        return false;
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
+    @SuppressWarnings("unchecked")
+    public @NotNull <R extends Record, D extends Database> TableSelection<R, D> getTableSelection(@NotNull String name) {
+        return new SqliteTableSelection<R, D>(name).link((D) this);
     }
 
     /**

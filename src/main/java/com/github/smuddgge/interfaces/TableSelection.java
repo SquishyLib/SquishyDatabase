@@ -1,8 +1,12 @@
 package com.github.smuddgge.interfaces;
 
+import com.github.smuddgge.errors.RecordCreationException;
 import com.github.smuddgge.record.Record;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import javax.xml.crypto.Data;
+import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
 /**
@@ -10,7 +14,17 @@ import java.util.List;
  *
  * @param <R> The instance of the record the table will use.
  */
-public interface TableSelection<R> {
+public abstract class TableSelection<R extends Record, D extends Database> {
+
+    /**
+     * The instance of the database.
+     */
+    private D database;
+
+    /**
+     * Used to get the name of the table.
+     */
+    public abstract @NotNull String getName();
 
     /**
      * Used to get the first record in the list of
@@ -19,7 +33,7 @@ public interface TableSelection<R> {
      * @param query The instance of a query.
      * @return The requested record.
      */
-    R getFirstRecord(@NotNull Query query);
+    public abstract R getFirstRecord(@NotNull Query query);
 
     /**
      * Used to get the list of records matching a query.
@@ -27,14 +41,14 @@ public interface TableSelection<R> {
      * @param query The instance of a query.
      * @return The requested list of records.
      */
-    List<R> getRecordList(@NotNull Query query);
+    public abstract List<R> getRecordList(@NotNull Query query);
 
     /**
      * Used to get the amount of records in the database.
      *
      * @return The amount of records.
      */
-    int getAmountOfRecords();
+    public abstract int getAmountOfRecords();
 
     /**
      * Used to get the amount of records given a query.
@@ -42,7 +56,7 @@ public interface TableSelection<R> {
      * @param query The instance of a query.
      * @return The requested amount of records.
      */
-    int getAmountOfRecords(@NotNull Query query);
+    public abstract int getAmountOfRecords(@NotNull Query query);
 
     /**
      * Used to insert a record into the database.
@@ -50,7 +64,7 @@ public interface TableSelection<R> {
      * @param record The instance of the record.
      * @return True if successful.
      */
-    boolean insertRecord(@NotNull R record);
+    public abstract boolean insertRecord(@NotNull R record);
 
     /**
      * Used to remove a record.
@@ -59,7 +73,7 @@ public interface TableSelection<R> {
      *               from the database table.
      * @return True if successful.
      */
-    boolean removeRecord(@NotNull Record record);
+    public abstract boolean removeRecord(@NotNull Record record);
 
     /**
      * Used to remove records in the database.
@@ -67,5 +81,52 @@ public interface TableSelection<R> {
      * @param query The instance of a query.
      * @return True if successful.
      */
-    boolean removeAllRecords(@NotNull Query query);
+    public abstract boolean removeAllRecords(@NotNull Query query);
+
+    /**
+     * Used to create a new instance of the record.
+     *
+     * @return A new instance of a record.
+     */
+    @SuppressWarnings("unchecked")
+    public @NotNull R createRecord() {
+        try {
+            ParameterizedType parameterizedType = (ParameterizedType) this.getClass().getGenericSuperclass();
+            Class<R> clazz = (Class<R>) parameterizedType.getActualTypeArguments()[0];
+            return clazz.newInstance();
+
+        } catch (InstantiationException | IllegalAccessException exception) {
+            exception.printStackTrace();
+            throw new RecordCreationException();
+        }
+    }
+
+    /**
+     * Used to link the table to a database.
+     *
+     * @param database The database to link to.
+     * @return This instance.
+     */
+    public TableSelection<R, D> link(@NotNull D database) {
+        this.database = database;
+        return this;
+    }
+
+    /**
+     * Used to check if the table is linked to a database.
+     *
+     * @return True if the table is linked.
+     */
+    public boolean isLinked() {
+        return this.database != null;
+    }
+
+    /**
+     * Used to get the instance of the database.
+     *
+     * @return The requested instance of the database.
+     */
+    protected @Nullable D getDatabase() {
+        return this.database;
+    }
 }
