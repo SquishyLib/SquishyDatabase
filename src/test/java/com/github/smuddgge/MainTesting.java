@@ -2,9 +2,6 @@ package com.github.smuddgge;
 
 import com.github.smuddgge.Tables.CustomerTable;
 import com.github.smuddgge.interfaces.Database;
-import com.github.smuddgge.interfaces.TableAdapter;
-import com.github.smuddgge.record.Record;
-import org.jetbrains.annotations.Nullable;
 
 public class MainTesting {
 

@@ -1,7 +1,9 @@
 package com.github.smuddgge.Records;
 
-import com.github.smuddgge.record.*;
 import com.github.smuddgge.record.Record;
+import com.github.smuddgge.record.RecordFieldAnnotation;
+import com.github.smuddgge.record.RecordFieldIgnoreAnnotation;
+import com.github.smuddgge.record.RecordFieldType;
 
 /**
  * <h1>Represents a customer</h1>

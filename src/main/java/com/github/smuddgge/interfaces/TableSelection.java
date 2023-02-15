@@ -5,7 +5,6 @@ import com.github.smuddgge.record.Record;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.xml.crypto.Data;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
