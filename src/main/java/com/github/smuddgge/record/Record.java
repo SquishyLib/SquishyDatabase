@@ -1,5 +1,7 @@
 package com.github.smuddgge.record;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -52,6 +54,15 @@ public class Record {
         }
 
         return recordFieldList;
+    }
+
+    /**
+     * Used to get the primary key.
+     *
+     * @return The instance of the primary key.
+     */
+    public @NotNull RecordField getPrimaryKey() {
+        return this.getFieldList(RecordFieldType.PRIMARY).get(0);
     }
 
     /**

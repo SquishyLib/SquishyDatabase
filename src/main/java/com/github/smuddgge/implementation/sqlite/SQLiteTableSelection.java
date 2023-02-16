@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,18 +47,22 @@ public class SQLiteTableSelection<R extends Record>
         assert this.getDatabase() != null;
 
         try {
+
+            // Build the statement
+            String statement = this.buildStatement(query) + ";";
+
             // Prepare the statement
-            PreparedStatement preparedStatement = this.getStatement(query);
+            PreparedStatement preparedStatement = this.appendQuery(statement, query);
 
             // Get the results.
-            ResultSet results = preparedStatement.executeQuery();
+            ResultSet results = this.getDatabase().executeQuery(preparedStatement);
             if (results == null) return null;
 
             // Create a new record.
             R record = this.createRecord();
 
             // If the result exists append the results.
-            if (results.first()) return (R) record.append(results);
+            if (results.next()) return (R) record.append(results);
 
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -68,13 +73,58 @@ public class SQLiteTableSelection<R extends Record>
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<R> getRecordList(@NotNull Query query) {
-        return null;
+        assert this.getDatabase() != null;
+
+        try {
+
+            // Build the statement.
+            String statement = this.buildStatement(query);
+
+            // Prepare the statement.
+            PreparedStatement preparedStatement = this.appendQuery(statement, query);
+
+            // Get the results.
+            ResultSet results = preparedStatement.executeQuery();
+            if (results == null) return null;
+
+            // Create a list of records from the result.
+            List<R> recordList = new ArrayList<>();
+
+            while (results.next()) {
+                recordList.add((R) this.createRecord().append(results));
+            }
+            return recordList;
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            this.getDatabase().setDisable();
+            return null;
+        }
     }
 
     @Override
     public int getAmountOfRecords() {
-        return 0;
+        assert this.getDatabase() != null;
+
+        try {
+
+            // Build statement.
+            String statement = "SELECT COUNT(*) AS amount FROM " + this.getName() + ";";
+
+            // Execute query.
+            ResultSet resultSet = this.getDatabase().executeQuery(statement);
+
+            if (resultSet == null) return 0;
+
+            return resultSet.getInt("amount");
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            this.getDatabase().setDisable();
+            return 0;
+        }
     }
 
     @Override
@@ -94,6 +144,27 @@ public class SQLiteTableSelection<R extends Record>
 
     @Override
     public boolean insertRecord(@NotNull Record record) {
-        return false;
+        assert this.getDatabase() != null;
+        assert record.getPrimaryKey().getValue() != null;
+
+        try {
+
+            // Check if the record already exists.
+            Record result = this.getFirstRecord(new Query()
+                    .match(record.getPrimaryKey().getKey(), record.getPrimaryKey().getValue()));
+
+            // If the result is null add the new record.
+            if (result == null) {
+                return this.addRecord(record);
+            }
+
+            // Otherwise, update the existing record.
+            return this.updateRecord(record);
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            this.getDatabase().setDisable();
+            return false;
+        }
     }
 }

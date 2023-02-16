@@ -24,11 +24,14 @@ public record RecordField(Record record, Field field) {
      * Used to get the value of the field.
      *
      * @return The fields value.
-     * @throws IllegalAccessException The exception thrown in the
-     *                                field or record does not exist.
+     * If an exception occurs it will return null.
      */
-    public Object getValue() throws IllegalAccessException {
-        return this.field.get(this.record);
+    public Object getValue() {
+        try {
+            return this.field.get(this.record);
+        } catch (IllegalAccessException ignored) {
+            return null;
+        }
     }
 
     /**
@@ -85,6 +88,16 @@ public record RecordField(Record record, Field field) {
      */
     public boolean hasFieldAnnotation() {
         return this.field.isAnnotationPresent(RecordFieldAnnotation.class);
+    }
+
+
+    /**
+     * Used to check if the field has a value.
+     *
+     * @return True if there is a value.
+     */
+    public boolean hasValue() {
+        return this.field.canAccess(this.record);
     }
 
     /**

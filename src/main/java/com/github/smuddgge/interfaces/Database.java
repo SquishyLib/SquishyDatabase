@@ -47,12 +47,22 @@ public abstract class Database {
     public abstract boolean createTable(@NotNull TableAdapter<?> table);
 
     /**
+     * <h1>Used to get the prefix of the database</h1>
+     * The prefix is shown in console outputs.
+     *
+     * @return The console prefix.
+     */
+    public abstract String getPrefix();
+
+    /**
      * Used to get a table section from the database.
      *
-     * @param name The name of the table.
+     * @param name         The name of the table.
+     * @param tableAdapter Instance of a table adapter
      * @return The instance of the requested table selection.
      */
-    public abstract @Nullable <R extends Record, D extends Database> TableSelection<R, D> getTableSelection(@NotNull String name);
+    public abstract @Nullable <R extends Record, D extends Database> TableSelection<R, D>
+    getTableSelection(@NotNull String name, TableAdapter<R> tableAdapter);
 
     /**
      * Used to get the list of tables in the database.
@@ -72,11 +82,13 @@ public abstract class Database {
      * if it exists.
      */
     @SuppressWarnings("unchecked")
-    public @Nullable <T extends TableAdapter<R>, R extends Record> T getTable(@NotNull Class<T> clazz) {
+    public @NotNull <T extends TableAdapter<R>, R extends Record> T getTable(@NotNull Class<T> clazz) {
         for (TableAdapter<?> table : this.getTableList()) {
             if (clazz.isAssignableFrom(table.getClass())) return (T) table;
         }
-        return null;
+
+        throw new NullPointerException("Table {table} does not exist in the database."
+                .replace("{table}", clazz.getName()));
     }
 
     /**

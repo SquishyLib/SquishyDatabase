@@ -13,6 +13,8 @@ public class Customer extends Record {
     @RecordFieldAnnotation(type = RecordFieldType.PRIMARY)
     public String identifier;
 
+    public String name;
+
     @RecordFieldIgnoreAnnotation
     public Object dataStore;
 }

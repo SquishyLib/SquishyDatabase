@@ -81,6 +81,6 @@ public abstract class TableAdapter<R extends Record> extends TableSelection<R, D
         if (this.getDatabase() == null) return null;
         if (this.getDatabase().isDisabled()) return null;
 
-        return this.getDatabase().getTableSelection(this.getName());
+        return this.getDatabase().getTableSelection(this.getName(), this);
     }
 }

@@ -7,6 +7,8 @@ import com.github.smuddgge.record.ForeignKeyAnnotation;
 import com.github.smuddgge.record.Record;
 import com.github.smuddgge.record.RecordField;
 import com.github.smuddgge.record.RecordFieldType;
+import com.github.smuddgge.utility.Console;
+import com.github.smuddgge.utility.ConsoleColour;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -68,6 +70,8 @@ public abstract class AbstractSQLiteDatabase extends Database {
         try {
             // Create a connection
             this.connection = DriverManager.getConnection(url);
+
+            Console.log(this.getPrefix() + ConsoleColour.YELLOW + "Connected to the database successfully.");
 
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -151,15 +155,29 @@ public abstract class AbstractSQLiteDatabase extends Database {
     public boolean executeStatement(@NotNull String statement) {
         if (this.isDisabled()) return false;
 
+        try {
+            // Execute the statement.
+            PreparedStatement preparedStatement = this.connection.prepareStatement(statement);
+            return this.executeStatement(preparedStatement);
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            this.setDisable();
+            return false;
+        }
+    }
+
+    public boolean executeStatement(@NotNull PreparedStatement statement) {
+        if (this.isDisabled()) return false;
+
         // Check if the database is in debug mode.
         if (this.isDebugMode()) {
-            System.out.println("[DebugMode] Attempting to execute statement : {statement}"
-                    .replace("{statement}", statement));
+            Console.log(this.getPrefix() + "Attempting to execute statement : " + ConsoleColour.PINK + statement);
         }
 
         try {
             // Execute the statement.
-            return connection.createStatement().execute(statement);
+            return statement.execute();
 
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -200,8 +218,7 @@ public abstract class AbstractSQLiteDatabase extends Database {
 
         // Check if the database is in debug mode.
         if (this.isDebugMode()) {
-            System.out.println("[DebugMode] Attempting to execute query : {statement}"
-                    .replace("{statement}", statement.toString()));
+            Console.log(this.getPrefix() + "Attempting to execute query : " + ConsoleColour.PINK + statement);
         }
 
         try {

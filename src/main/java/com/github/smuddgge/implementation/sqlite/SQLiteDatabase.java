@@ -6,6 +6,7 @@ import com.github.smuddgge.interfaces.Database;
 import com.github.smuddgge.interfaces.TableAdapter;
 import com.github.smuddgge.interfaces.TableSelection;
 import com.github.smuddgge.record.Record;
+import com.github.smuddgge.utility.ConsoleColour;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,10 +52,23 @@ public class SQLiteDatabase extends AbstractSQLiteDatabase {
     }
 
     @Override
+    public String getPrefix() {
+        return ConsoleColour.GRAY + "[SQLiteDatabase] " + ConsoleColour.GREEN;
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
-    public @Nullable <R extends Record, D extends Database> TableSelection<R, D> getTableSelection(@NotNull String name) {
+    public @Nullable <R extends Record, D extends Database> TableSelection<R, D>
+    getTableSelection(@NotNull String name, TableAdapter<R> tableAdapter) {
+
         if (this.isDisabled()) return null;
-        return (TableSelection<R, D>) new SQLiteTableSelection<R>(name, this);
+
+        return (TableSelection<R, D>) new SQLiteTableSelection<R>(name, this) {
+            @Override
+            public @NotNull R createRecord() {
+                return tableAdapter.createRecord();
+            }
+        };
     }
 
     /**
