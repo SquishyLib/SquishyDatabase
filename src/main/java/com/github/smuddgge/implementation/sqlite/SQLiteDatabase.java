@@ -7,17 +7,18 @@ import com.github.smuddgge.interfaces.TableAdapter;
 import com.github.smuddgge.interfaces.TableSelection;
 import com.github.smuddgge.record.Record;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
-public class SqliteDatabase extends AbstractSqliteDatabase {
+public class SQLiteDatabase extends AbstractSQLiteDatabase {
 
     /**
      * Used to create a sqlite database.
      *
      * @param file The instance of the file.
      */
-    public SqliteDatabase(File file) {
+    public SQLiteDatabase(File file) {
         this.file = file;
     }
 
@@ -51,8 +52,9 @@ public class SqliteDatabase extends AbstractSqliteDatabase {
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NotNull <R extends Record, D extends Database> TableSelection<R, D> getTableSelection(@NotNull String name) {
-        return new SqliteTableSelection<R, D>(name).link((D) this);
+    public @Nullable <R extends Record, D extends Database> TableSelection<R, D> getTableSelection(@NotNull String name) {
+        if (this.isDisabled()) return null;
+        return (TableSelection<R, D>) new SQLiteTableSelection<R>(name, this);
     }
 
     /**
@@ -62,15 +64,15 @@ public class SqliteDatabase extends AbstractSqliteDatabase {
      * @param databaseCredentials The instance of the credentials.
      * @return The requested sqlite database.
      */
-    public static @NotNull SqliteDatabase extract(@NotNull DatabaseCredentials databaseCredentials) {
+    public static @NotNull SQLiteDatabase extract(@NotNull DatabaseCredentials databaseCredentials) {
 
         // If a file is stated
         if (databaseCredentials.getFile() != null) {
-            return new SqliteDatabase(databaseCredentials.getFile());
+            return new SQLiteDatabase(databaseCredentials.getFile());
         }
 
         if (databaseCredentials.getPath() != null) {
-            return new SqliteDatabase(new File(databaseCredentials.getPath()));
+            return new SQLiteDatabase(new File(databaseCredentials.getPath()));
         }
 
         // If the incorrect credentials were given

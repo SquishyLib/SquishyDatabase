@@ -1,13 +1,13 @@
 package com.github.smuddgge;
 
-import com.github.smuddgge.implementation.sqlite.SqliteDatabase;
+import com.github.smuddgge.implementation.sqlite.SQLiteDatabase;
 import com.github.smuddgge.interfaces.Database;
 
 public enum DatabaseFactory {
     SQLITE {
         @Override
         public Database create(DatabaseCredentials databaseCredentials) {
-            return SqliteDatabase.extract(databaseCredentials).setup();
+            return SQLiteDatabase.extract(databaseCredentials).setup();
         }
     };
 

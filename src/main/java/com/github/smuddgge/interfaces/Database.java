@@ -22,7 +22,12 @@ public abstract class Database {
     /**
      * Represents the status of the database.
      */
-    private boolean isDisabled;
+    private boolean isDisabled = false;
+
+    /**
+     * Represents if the database is in debug mode.
+     */
+    private boolean isDebugMode = false;
 
     /**
      * Used to set up the database.
@@ -47,7 +52,7 @@ public abstract class Database {
      * @param name The name of the table.
      * @return The instance of the requested table selection.
      */
-    public abstract @NotNull <R extends Record, D extends Database> TableSelection<R, D> getTableSelection(@NotNull String name);
+    public abstract @Nullable <R extends Record, D extends Database> TableSelection<R, D> getTableSelection(@NotNull String name);
 
     /**
      * Used to get the list of tables in the database.
@@ -66,7 +71,8 @@ public abstract class Database {
      * @return The instance of the requested table
      * if it exists.
      */
-    public @Nullable <T extends TableAdapter<R>, R extends Record> T getTable(Class<T> clazz) {
+    @SuppressWarnings("unchecked")
+    public @Nullable <T extends TableAdapter<R>, R extends Record> T getTable(@NotNull Class<T> clazz) {
         for (TableAdapter<?> table : this.getTableList()) {
             if (clazz.isAssignableFrom(table.getClass())) return (T) table;
         }
@@ -96,6 +102,17 @@ public abstract class Database {
     }
 
     /**
+     * Used to set if the database should
+     * be in debug mode.
+     *
+     * @param debugMode True if the database should
+     *                  be set to debug mode.
+     */
+    public void setDebugMode(boolean debugMode) {
+        this.isDebugMode = debugMode;
+    }
+
+    /**
      * Used to check if the database is disabled.
      *
      * @return True if the database is disabled.
@@ -111,6 +128,15 @@ public abstract class Database {
      */
     public boolean isEnabled() {
         return !this.isDisabled();
+    }
+
+    /**
+     * Used to check if the database is in debug mode.
+     *
+     * @return True if in debug mode.
+     */
+    public boolean isDebugMode() {
+        return this.isDebugMode;
     }
 
     /**

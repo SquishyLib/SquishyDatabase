@@ -1,11 +1,14 @@
 package com.github.smuddgge.implementation.sqlite;
 
-import com.github.smuddgge.interfaces.Database;
-import com.github.smuddgge.interfaces.Query;
 import com.github.smuddgge.interfaces.TableSelection;
 import com.github.smuddgge.record.Record;
+import com.github.smuddgge.utility.Query;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -13,9 +16,9 @@ import java.util.List;
  * of a {@link TableSelection}.
  *
  * @param <R> The type of record used.
- * @param <D> The type of database used.
  */
-public class SqliteTableSelection<R extends Record, D extends Database> extends TableSelection<R, D> {
+public class SQLiteTableSelection<R extends Record>
+        extends AbstractSQLiteTableSelection<R> {
 
     /**
      * The tables name.
@@ -27,8 +30,9 @@ public class SqliteTableSelection<R extends Record, D extends Database> extends 
      *
      * @param name The name of the record.
      */
-    public SqliteTableSelection(String name) {
+    public SQLiteTableSelection(@NotNull String name, @NotNull SQLiteDatabase database) {
         this.name = name;
+        this.link(database);
     }
 
     @Override
@@ -37,7 +41,29 @@ public class SqliteTableSelection<R extends Record, D extends Database> extends 
     }
 
     @Override
-    public R getFirstRecord(@NotNull Query query) {
+    @SuppressWarnings("unchecked")
+    public @Nullable R getFirstRecord(@NotNull Query query) {
+        assert this.getDatabase() != null;
+
+        try {
+            // Prepare the statement
+            PreparedStatement preparedStatement = this.getStatement(query);
+
+            // Get the results.
+            ResultSet results = preparedStatement.executeQuery();
+            if (results == null) return null;
+
+            // Create a new record.
+            R record = this.createRecord();
+
+            // If the result exists append the results.
+            if (results.first()) return (R) record.append(results);
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            this.getDatabase().setDisable();
+        }
+
         return null;
     }
 

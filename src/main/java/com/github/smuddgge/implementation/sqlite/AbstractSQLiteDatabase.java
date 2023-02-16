@@ -11,15 +11,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
+import java.sql.*;
 
 /**
  * Represents methods not defined in the
  * {@link Database} implementation.
+ * However, these methods are specific to
+ * the sqlite implementation.
  */
-public abstract class AbstractSqliteDatabase extends Database {
+public abstract class AbstractSQLiteDatabase extends Database {
 
     /**
      * The instance of the file.
@@ -30,6 +30,15 @@ public abstract class AbstractSqliteDatabase extends Database {
      * The connection to the sqlite database.
      */
     protected Connection connection;
+
+    /**
+     * Used to get the database's connection instance.
+     *
+     * @return Instance of the database connection.
+     */
+    public Connection getConnection() {
+        return this.connection;
+    }
 
     /**
      * Used to initiate the database driver class.
@@ -142,13 +151,67 @@ public abstract class AbstractSqliteDatabase extends Database {
     public boolean executeStatement(@NotNull String statement) {
         if (this.isDisabled()) return false;
 
+        // Check if the database is in debug mode.
+        if (this.isDebugMode()) {
+            System.out.println("[DebugMode] Attempting to execute statement : {statement}"
+                    .replace("{statement}", statement));
+        }
+
         try {
             // Execute the statement.
             return connection.createStatement().execute(statement);
 
         } catch (SQLException exception) {
+            exception.printStackTrace();
             this.setDisable();
             return false;
+        }
+    }
+
+    /**
+     * Used to execute a query and return the results.
+     *
+     * @param statement The statement to execute.
+     * @return The instance of the result set.
+     */
+    public @Nullable ResultSet executeQuery(@NotNull String statement) {
+        if (this.isDisabled()) return null;
+
+        try {
+            // Execute the statement.
+            PreparedStatement preparedStatement = this.connection.prepareStatement(statement);
+            return this.executeQuery(preparedStatement);
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            this.setDisable();
+            return null;
+        }
+    }
+
+    /**
+     * Used to execute a query and return the results.
+     *
+     * @param statement The prepared statement to execute.
+     * @return The instance of the result set.
+     */
+    public @Nullable ResultSet executeQuery(@NotNull PreparedStatement statement) {
+        if (this.isDisabled()) return null;
+
+        // Check if the database is in debug mode.
+        if (this.isDebugMode()) {
+            System.out.println("[DebugMode] Attempting to execute query : {statement}"
+                    .replace("{statement}", statement.toString()));
+        }
+
+        try {
+            // Execute the statement.
+            return statement.executeQuery();
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            this.setDisable();
+            return null;
         }
     }
 }

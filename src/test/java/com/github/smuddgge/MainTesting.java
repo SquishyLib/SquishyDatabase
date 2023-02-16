@@ -10,6 +10,7 @@ public class MainTesting {
         // Create a database
         DatabaseFactory databaseFactory = DatabaseFactory.SQLITE;
         Database database = databaseFactory.create(new DatabaseCredentials().setPath("src/test/resources/database.sqlite3"));
+        database.setDebugMode(true);
 
         // Create a new table
         CustomerTable customerTable = new CustomerTable();

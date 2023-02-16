@@ -1,6 +1,8 @@
 package com.github.smuddgge.record;
 
 import java.lang.reflect.Field;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,5 +52,20 @@ public class Record {
         }
 
         return recordFieldList;
+    }
+
+    /**
+     * Used to append the result set to this record.
+     *
+     * @param results The instance of the results.
+     * @return This instance.
+     * @throws SQLException If a field does not exist in the result.
+     */
+    public Record append(ResultSet results) throws SQLException {
+        for (RecordField recordField : this.getFieldList()) {
+            recordField.setValue(results.getObject(recordField.getKey()));
+        }
+
+        return this;
     }
 }

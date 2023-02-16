@@ -1,15 +1,17 @@
 package com.github.smuddgge.interfaces;
 
 import com.github.smuddgge.record.Record;
+import com.github.smuddgge.utility.Query;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
 /**
- * Represents a database table.
+ * <h1>Represents a database table</h1>
+ * Developers can inherit this class to create a custom table.
  *
- * @param <R> The instance of the record.
+ * @param <R> The type of record.
  */
 public abstract class TableAdapter<R extends Record> extends TableSelection<R, Database> {
 
@@ -77,6 +79,8 @@ public abstract class TableAdapter<R extends Record> extends TableSelection<R, D
      */
     protected @Nullable TableSelection<R, Database> getTableSelection() {
         if (this.getDatabase() == null) return null;
+        if (this.getDatabase().isDisabled()) return null;
+
         return this.getDatabase().getTableSelection(this.getName());
     }
 }

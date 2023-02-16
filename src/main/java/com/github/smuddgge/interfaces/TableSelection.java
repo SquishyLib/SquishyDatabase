@@ -2,6 +2,7 @@ package com.github.smuddgge.interfaces;
 
 import com.github.smuddgge.errors.RecordCreationException;
 import com.github.smuddgge.record.Record;
+import com.github.smuddgge.utility.Query;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -21,7 +22,9 @@ public abstract class TableSelection<R extends Record, D extends Database> {
     private D database;
 
     /**
-     * Used to get the name of the table.
+     * <h1>Used to get the name of the table</h1>
+     * This value should be constant. If the user can
+     * change this value you may be venerable to sql injection.
      */
     public abstract @NotNull String getName();
 
@@ -32,7 +35,7 @@ public abstract class TableSelection<R extends Record, D extends Database> {
      * @param query The instance of a query.
      * @return The requested record.
      */
-    public abstract R getFirstRecord(@NotNull Query query);
+    public abstract @Nullable R getFirstRecord(@NotNull Query query);
 
     /**
      * Used to get the list of records matching a query.
