@@ -1,4 +1,4 @@
-package com.github.smuddgge.utility;
+package com.github.smuddgge.utility.console;
 
 /**
  * <h2>Represents the console</h2>

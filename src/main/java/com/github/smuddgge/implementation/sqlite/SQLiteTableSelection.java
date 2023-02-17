@@ -49,7 +49,8 @@ public class SQLiteTableSelection<R extends Record>
         try {
 
             // Build the statement
-            String statement = this.buildStatement(query) + ";";
+            String statement = "SELECT * FROM " + this.getName() + " WHERE " +
+                    this.buildWhereStatement(query) + " LIMIT 1;";
 
             // Prepare the statement
             PreparedStatement preparedStatement = this.appendQuery(statement, query);
@@ -80,7 +81,8 @@ public class SQLiteTableSelection<R extends Record>
         try {
 
             // Build the statement.
-            String statement = this.buildStatement(query);
+            String statement = "SELECT * FROM " + this.getName() + " WHERE " +
+                    this.buildWhereStatement(query) + ";";
 
             // Prepare the statement.
             PreparedStatement preparedStatement = this.appendQuery(statement, query);
@@ -129,17 +131,78 @@ public class SQLiteTableSelection<R extends Record>
 
     @Override
     public int getAmountOfRecords(@NotNull Query query) {
-        return 0;
+        assert this.getDatabase() != null;
+
+        try {
+
+            // Build the statement
+            String statement = "SELECT COUNT(*) AS amount FROM " + this.getName() + " WHERE " +
+                    this.buildWhereStatement(query) + ";";
+
+            // Prepare the statement.
+            PreparedStatement preparedStatement = this.appendQuery(statement, query);
+
+            // Execute query.
+            ResultSet resultSet = this.getDatabase().executeQuery(preparedStatement);
+
+            if (resultSet == null) return 0;
+
+            return resultSet.getInt("amount");
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            this.getDatabase().setDisable();
+            return 0;
+        }
     }
 
     @Override
     public boolean removeRecord(@NotNull Record record) {
-        return false;
+        assert this.getDatabase() != null;
+        assert this.getDatabase().getConnection() != null;
+
+        try {
+
+            // Create statement.
+            String statement = "DELETE FROM " + this.getName() + " WHERE " +
+                    record.getPrimaryKey().getKey() + " = ?;";
+
+            // Prepare the statement.
+            PreparedStatement preparedStatement = this.getDatabase()
+                    .getConnection().prepareStatement(statement);
+
+            // Execute the statement.
+            return this.getDatabase().executeStatement(preparedStatement);
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            this.getDatabase().setDisable();
+            return false;
+        }
     }
 
     @Override
     public boolean removeAllRecords(@NotNull Query query) {
-        return false;
+        assert this.getDatabase() != null;
+        assert this.getDatabase().getConnection() != null;
+
+        try {
+
+            // Create statement.
+            String statement = "DELETE FROM " + this.getName() + " WHERE " +
+                    this.buildWhereStatement(query) + ";";
+
+            // Prepare the statement.
+            PreparedStatement preparedStatement = this.appendQuery(statement, query);
+
+            // Execute the statement.
+            return this.getDatabase().executeStatement(preparedStatement);
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            this.getDatabase().setDisable();
+            return false;
+        }
     }
 
     @Override

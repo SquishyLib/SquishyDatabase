@@ -1,7 +1,7 @@
-package com.github.smuddgge.Tables;
+package com.github.smuddgge.tables;
 
-import com.github.smuddgge.Records.Customer;
 import com.github.smuddgge.interfaces.TableAdapter;
+import com.github.smuddgge.records.Customer;
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -6,7 +6,7 @@ import com.github.smuddgge.interfaces.Database;
 import com.github.smuddgge.interfaces.TableAdapter;
 import com.github.smuddgge.interfaces.TableSelection;
 import com.github.smuddgge.record.Record;
-import com.github.smuddgge.utility.ConsoleColour;
+import com.github.smuddgge.utility.console.ConsoleColour;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,6 +63,7 @@ public class SQLiteDatabase extends AbstractSQLiteDatabase {
 
         if (this.isDisabled()) return null;
 
+        // Return SQLiteTable and use the table adapter to create records.
         return (TableSelection<R, D>) new SQLiteTableSelection<R>(name, this) {
             @Override
             public @NotNull R createRecord() {
@@ -80,11 +81,12 @@ public class SQLiteDatabase extends AbstractSQLiteDatabase {
      */
     public static @NotNull SQLiteDatabase extract(@NotNull DatabaseCredentials databaseCredentials) {
 
-        // If a file is stated
+        // If a file is stated.
         if (databaseCredentials.getFile() != null) {
             return new SQLiteDatabase(databaseCredentials.getFile());
         }
 
+        // Is a path stated.
         if (databaseCredentials.getPath() != null) {
             return new SQLiteDatabase(new File(databaseCredentials.getPath()));
         }

@@ -37,13 +37,15 @@ public abstract class Database {
     public abstract @NotNull Database setup();
 
     /**
-     * Used to create a table in the database.
+     * Used to create a table in the database
+     * if it doesn't exists.
      * This also links the table to the database which
      * lets you get the table from the database.
      *
      * @param table The instance of the table.
      * @return True if the table was successfully added.
      */
+    @SuppressWarnings("UnusedReturnValue")
     public abstract boolean createTable(@NotNull TableAdapter<?> table);
 
     /**
@@ -109,8 +111,9 @@ public abstract class Database {
     /**
      * Used to disable the database.
      */
-    public void setDisable() {
+    public Database setDisable() {
         this.isDisabled = false;
+        return this;
     }
 
     /**
@@ -119,9 +122,11 @@ public abstract class Database {
      *
      * @param debugMode True if the database should
      *                  be set to debug mode.
+     * @return This instance of the database.
      */
-    public void setDebugMode(boolean debugMode) {
+    public Database setDebugMode(boolean debugMode) {
         this.isDebugMode = debugMode;
+        return this;
     }
 
     /**

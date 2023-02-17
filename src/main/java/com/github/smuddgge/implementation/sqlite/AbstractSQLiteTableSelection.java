@@ -21,18 +21,18 @@ public abstract class AbstractSQLiteTableSelection<R extends Record>
         extends TableSelection<R, SQLiteDatabase> {
 
     /**
-     * Used to build the basic statement.
+     * <h1>Used to build the where statement</h1>
      * This will use the query to insert the correct
      * amount of wildcards.
+     * <p>Example output</p>
+     * <li>? = ? AND ? = ?</li>
      *
      * @param query The instance of the query.
      * @return The instance of the statement.
      * The statement will not contain a semicolon.
      */
-    protected @NotNull String buildStatement(@NotNull Query query) {
+    protected @NotNull String buildWhereStatement(@NotNull Query query) {
         StringBuilder statement = new StringBuilder();
-
-        statement.append("SELECT * FROM ").append(this.getName()).append(" WHERE ");
 
         for (Map.Entry<String, Object> map : query.get().entrySet()) {
             statement.append(map.getKey()).append(" = ? AND");
@@ -54,6 +54,7 @@ public abstract class AbstractSQLiteTableSelection<R extends Record>
      */
     protected @NotNull PreparedStatement appendQuery(String statement, Query query) throws SQLException {
         assert this.getDatabase() != null;
+        assert this.getDatabase().getConnection() != null;
 
         // Prepare the statement.
         PreparedStatement preparedStatement = this.getDatabase()
@@ -75,8 +76,10 @@ public abstract class AbstractSQLiteTableSelection<R extends Record>
      * @return True if the record was added successfully.
      * @throws SQLException If unsuccessful.
      */
+    @SuppressWarnings("Duplicates")
     public boolean addRecord(@NotNull Record record) throws SQLException {
         assert this.getDatabase() != null;
+        assert this.getDatabase().getConnection() != null;
 
         // Create the statement.
         StringBuilder statementBuilder = new StringBuilder();
@@ -118,8 +121,10 @@ public abstract class AbstractSQLiteTableSelection<R extends Record>
      * @param record The instance of the record.
      * @return True if the record was updated successfully.
      */
+    @SuppressWarnings("Duplicates")
     public boolean updateRecord(@NotNull Record record) throws SQLException {
         assert this.getDatabase() != null;
+        assert this.getDatabase().getConnection() != null;
 
         // Create the statement.
         StringBuilder statementBuilder = new StringBuilder();

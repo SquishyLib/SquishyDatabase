@@ -7,8 +7,8 @@ import com.github.smuddgge.record.ForeignKeyAnnotation;
 import com.github.smuddgge.record.Record;
 import com.github.smuddgge.record.RecordField;
 import com.github.smuddgge.record.RecordFieldType;
-import com.github.smuddgge.utility.Console;
-import com.github.smuddgge.utility.ConsoleColour;
+import com.github.smuddgge.utility.console.Console;
+import com.github.smuddgge.utility.console.ConsoleColour;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,11 +34,14 @@ public abstract class AbstractSQLiteDatabase extends Database {
     protected Connection connection;
 
     /**
-     * Used to get the database's connection instance.
+     * <h1>Used to get the database's connection instance</h1>
+     * A connection should be initialised if the
+     * database is enabled. This can be checked
+     * with {@link Database#isEnabled()}.
      *
      * @return Instance of the database connection.
      */
-    public Connection getConnection() {
+    public @Nullable Connection getConnection() {
         return this.connection;
     }
 
@@ -49,14 +52,16 @@ public abstract class AbstractSQLiteDatabase extends Database {
         try {
             Class.forName("org.sqlite.JDBC");
         } catch (ClassNotFoundException exception) {
+            Console.error(this.getPrefix() + "org.sqlite.JDBC does not exist.");
             exception.printStackTrace();
             this.setDisable();
         }
     }
 
     /**
-     * Used to create the directory the database is located.
+     * Used to create the parent directory where the database is located.
      */
+    @SuppressWarnings("all")
     protected void createDirectory() {
         new File(this.file.getParent()).mkdir();
     }

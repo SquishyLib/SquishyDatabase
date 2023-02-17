@@ -1,4 +1,4 @@
-package com.github.smuddgge.Records;
+package com.github.smuddgge.records;
 
 import com.github.smuddgge.record.Record;
 import com.github.smuddgge.record.RecordFieldAnnotation;
