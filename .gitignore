@@ -34,6 +34,4 @@ target/*
 .idea/*
 
 # Testing resources
-*.resources.database
-src/test/resources/database.sqlite3
-src/test/resources/database.sqlite3
+src/test/resources/database
