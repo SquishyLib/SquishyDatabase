@@ -1,4 +1,4 @@
-package com.github.smuddgge.utility;
+package com.github.smuddgge;
 
 import org.jetbrains.annotations.NotNull;
 

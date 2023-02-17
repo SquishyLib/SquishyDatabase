@@ -1,5 +1,7 @@
 package com.github.smuddgge.implementation.sqlite;
 
+import com.github.smuddgge.console.Console;
+import com.github.smuddgge.console.ConsoleColour;
 import com.github.smuddgge.errors.ForeignKeyReferenceException;
 import com.github.smuddgge.interfaces.Database;
 import com.github.smuddgge.interfaces.TableAdapter;
@@ -7,8 +9,6 @@ import com.github.smuddgge.record.ForeignKeyAnnotation;
 import com.github.smuddgge.record.Record;
 import com.github.smuddgge.record.RecordField;
 import com.github.smuddgge.record.RecordFieldType;
-import com.github.smuddgge.utility.console.Console;
-import com.github.smuddgge.utility.console.ConsoleColour;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

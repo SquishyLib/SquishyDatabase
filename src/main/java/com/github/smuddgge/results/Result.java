@@ -1,4 +1,4 @@
-package com.github.smuddgge.utility.results;
+package com.github.smuddgge.results;
 
 /**
  * <h2>Represents a result type</h2>

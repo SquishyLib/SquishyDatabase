@@ -2,11 +2,12 @@ package com.github.smuddgge.testing;
 
 import com.github.smuddgge.DatabaseCredentials;
 import com.github.smuddgge.DatabaseFactory;
+import com.github.smuddgge.console.Console;
 import com.github.smuddgge.interfaces.Database;
 import com.github.smuddgge.records.Customer;
 import com.github.smuddgge.tables.CustomerTable;
-import com.github.smuddgge.utility.Query;
-import com.github.smuddgge.utility.results.ResultChecker;
+import com.github.smuddgge.Query;
+import com.github.smuddgge.results.ResultChecker;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -78,7 +79,7 @@ public class SQLiteTest {
 
         // Get the record back from the table.
         List<Customer> result = customerTable.getRecordList(
-                new Query().match("name", "Smudge")
+                new Query().match("name", customer2.name)
         );
 
         assert result != null;
@@ -89,5 +90,125 @@ public class SQLiteTest {
                 .expect(result.get(0).name, customer1.name)
                 .expect(result.get(1).identifier, customer2.identifier)
                 .expect(result.get(1).name, customer2.name);
+    }
+
+    @Test
+    public void testGetAmountOfRecords() {
+        Database database = databaseFactory.create(
+                new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
+        ).setDebugMode(true);
+
+        // Create table.
+        CustomerTable customerTable = new CustomerTable();
+        database.createTable(customerTable);
+
+        // Create a new record.
+        Customer customer1 = new Customer();
+        customer1.identifier = UUID.randomUUID().toString();
+        customer1.name = UUID.randomUUID().toString();
+
+        // Insert the record.
+        customerTable.insertRecord(customer1);
+
+        // Get the record back from the table.
+        int amount = customerTable.getAmountOfRecords();
+
+        Console.log("Total amount of records : " + amount);
+
+        // Check results.
+        new ResultChecker().expect(amount > 0);
+    }
+
+    @Test
+    public void testQueryGetAmountOfRecords() {
+        Database database = databaseFactory.create(
+                new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
+        ).setDebugMode(true);
+
+        // Create table.
+        CustomerTable customerTable = new CustomerTable();
+        database.createTable(customerTable);
+
+        // Create a new record.
+        Customer customer1 = new Customer();
+        customer1.identifier = UUID.randomUUID().toString();
+        customer1.name = UUID.randomUUID().toString();
+
+        // Insert the record.
+        customerTable.insertRecord(customer1);
+
+        // Get the record back from the table.
+        int amount = customerTable.getAmountOfRecords(
+                new Query().match("name", customer1.name)
+        );
+
+        // Check results.
+        new ResultChecker().expect(amount > 0);
+    }
+
+    @Test
+    public void testRemoveRecord() {
+        Database database = databaseFactory.create(
+                new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
+        ).setDebugMode(true);
+
+        // Create table.
+        CustomerTable customerTable = new CustomerTable();
+        database.createTable(customerTable);
+
+        // Create a new record.
+        Customer customer1 = new Customer();
+        customer1.identifier = UUID.randomUUID().toString();
+        customer1.name = UUID.randomUUID().toString();
+
+        // Insert the record.
+        customerTable.insertRecord(customer1);
+
+        // Remove the record.
+        customerTable.removeRecord(customer1);
+
+        // Get the record back from the table.
+        int amount = customerTable.getAmountOfRecords(
+                new Query().match("identifier", customer1.identifier)
+        );
+
+        // Check results.
+        new ResultChecker().expect(amount, 0);
+    }
+
+    @Test
+    public void testQueryRemoveRecord() {
+        Database database = databaseFactory.create(
+                new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
+        ).setDebugMode(true);
+
+        // Create table.
+        CustomerTable customerTable = new CustomerTable();
+        database.createTable(customerTable);
+
+        // Create a new record.
+        Customer customer1 = new Customer();
+        customer1.identifier = UUID.randomUUID().toString();
+        customer1.name = UUID.randomUUID().toString();
+
+        Customer customer2 = new Customer();
+        customer2.identifier = UUID.randomUUID().toString();
+        customer2.name = customer1.name;
+
+        // Insert the record.
+        customerTable.insertRecord(customer1);
+        customerTable.insertRecord(customer2);
+
+        customerTable.removeAllRecords(
+                new Query().match("name", customer2.name)
+        );
+
+        // Get the record back from the table.
+        int amount = customerTable.getAmountOfRecords(
+                new Query().match("identifier", customer1.identifier)
+        );
+
+        // Check results.
+        new ResultChecker().expect(amount, 0);
     }
 }

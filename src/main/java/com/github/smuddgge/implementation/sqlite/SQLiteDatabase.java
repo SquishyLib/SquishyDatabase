@@ -1,12 +1,13 @@
 package com.github.smuddgge.implementation.sqlite;
 
 import com.github.smuddgge.DatabaseCredentials;
+import com.github.smuddgge.DatabaseFactory;
+import com.github.smuddgge.console.ConsoleColour;
 import com.github.smuddgge.errors.DatabaseCredentialsException;
 import com.github.smuddgge.interfaces.Database;
 import com.github.smuddgge.interfaces.TableAdapter;
 import com.github.smuddgge.interfaces.TableSelection;
 import com.github.smuddgge.record.Record;
-import com.github.smuddgge.utility.console.ConsoleColour;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,6 +55,11 @@ public class SQLiteDatabase extends AbstractSQLiteDatabase {
     @Override
     public String getPrefix() {
         return ConsoleColour.GRAY + "[SQLiteDatabase] " + ConsoleColour.GREEN;
+    }
+
+    @Override
+    public DatabaseFactory getType() {
+        return DatabaseFactory.SQLITE;
     }
 
     @Override

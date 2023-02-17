@@ -2,7 +2,7 @@ package com.github.smuddgge.implementation.sqlite;
 
 import com.github.smuddgge.interfaces.TableSelection;
 import com.github.smuddgge.record.Record;
-import com.github.smuddgge.utility.Query;
+import com.github.smuddgge.Query;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -170,6 +170,8 @@ public class SQLiteTableSelection<R extends Record>
             // Prepare the statement.
             PreparedStatement preparedStatement = this.getDatabase()
                     .getConnection().prepareStatement(statement);
+
+            preparedStatement.setObject(1, record.getPrimaryKey().getValue());
 
             // Execute the statement.
             return this.getDatabase().executeStatement(preparedStatement);

@@ -1,7 +1,7 @@
-package com.github.smuddgge.utility.results.types;
+package com.github.smuddgge.results.types;
 
-import com.github.smuddgge.utility.results.Result;
-import com.github.smuddgge.utility.results.ResultChecker;
+import com.github.smuddgge.results.Result;
+import com.github.smuddgge.results.ResultChecker;
 
 /**
  * Used in a {@link ResultChecker} to check

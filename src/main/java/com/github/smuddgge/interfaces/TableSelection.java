@@ -1,8 +1,8 @@
 package com.github.smuddgge.interfaces;
 
+import com.github.smuddgge.Query;
 import com.github.smuddgge.errors.RecordCreationException;
 import com.github.smuddgge.record.Record;
-import com.github.smuddgge.utility.Query;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

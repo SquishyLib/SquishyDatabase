@@ -1,10 +1,10 @@
 package com.github.smuddgge.implementation.sqlite;
 
+import com.github.smuddgge.Query;
 import com.github.smuddgge.interfaces.TableSelection;
 import com.github.smuddgge.record.Record;
 import com.github.smuddgge.record.RecordField;
 import com.github.smuddgge.record.RecordFieldType;
-import com.github.smuddgge.utility.Query;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.PreparedStatement;

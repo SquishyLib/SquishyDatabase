@@ -1,5 +1,6 @@
 package com.github.smuddgge.interfaces;
 
+import com.github.smuddgge.DatabaseFactory;
 import com.github.smuddgge.record.Record;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -55,6 +56,13 @@ public abstract class Database {
      * @return The console prefix.
      */
     public abstract String getPrefix();
+
+    /**
+     * Used to get the database factory type.
+     *
+     * @return The database factory type.
+     */
+    public abstract DatabaseFactory getType();
 
     /**
      * Used to get a table section from the database.
