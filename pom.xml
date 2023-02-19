@@ -46,7 +46,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.2</version>
                 <configuration> <!-- Compile java 7 compatible bytecode -->
-                    <source>8</source>
+                    <source>16</source>
                     <target>16</target>
                 </configuration>
             </plugin>
