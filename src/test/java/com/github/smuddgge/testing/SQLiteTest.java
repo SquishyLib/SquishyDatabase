@@ -23,12 +23,15 @@ public class SQLiteTest {
      */
     public static DatabaseFactory databaseFactory = DatabaseFactory.SQLITE;
 
+    /**
+     * Create database.
+     */
+    public static Database database = databaseFactory.create(
+            new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
+    ).setDebugMode(true);
+
     @Test
     public void testGetFirstRecord() {
-        Database database = databaseFactory.create(
-                new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
-        ).setDebugMode(true);
-
         // Create table.
         CustomerTable customerTable = new CustomerTable();
         database.createTable(customerTable);
@@ -56,10 +59,6 @@ public class SQLiteTest {
 
     @Test
     public void testGetRecordList() {
-        Database database = databaseFactory.create(
-                new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
-        ).setDebugMode(true);
-
         // Create table.
         CustomerTable customerTable = new CustomerTable();
         database.createTable(customerTable);
@@ -94,10 +93,6 @@ public class SQLiteTest {
 
     @Test
     public void testGetAmountOfRecords() {
-        Database database = databaseFactory.create(
-                new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
-        ).setDebugMode(true);
-
         // Create table.
         CustomerTable customerTable = new CustomerTable();
         database.createTable(customerTable);
@@ -121,10 +116,6 @@ public class SQLiteTest {
 
     @Test
     public void testQueryGetAmountOfRecords() {
-        Database database = databaseFactory.create(
-                new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
-        ).setDebugMode(true);
-
         // Create table.
         CustomerTable customerTable = new CustomerTable();
         database.createTable(customerTable);
@@ -148,10 +139,6 @@ public class SQLiteTest {
 
     @Test
     public void testRemoveRecord() {
-        Database database = databaseFactory.create(
-                new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
-        ).setDebugMode(true);
-
         // Create table.
         CustomerTable customerTable = new CustomerTable();
         database.createTable(customerTable);
@@ -178,10 +165,6 @@ public class SQLiteTest {
 
     @Test
     public void testQueryRemoveRecord() {
-        Database database = databaseFactory.create(
-                new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
-        ).setDebugMode(true);
-
         // Create table.
         CustomerTable customerTable = new CustomerTable();
         database.createTable(customerTable);
