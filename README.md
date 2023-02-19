@@ -1,4 +1,4 @@
-[![Tag](https://jitpack.io/v/Smuddgge/SquishyDatabase.svg)](https://jitpack.io/#Smuddgge/SquishyDatabase)
+[![](https://jitpack.io/v/Smuddgge/SquishyDatabase.svg)](https://jitpack.io/#Smuddgge/SquishyDatabase)
 
 **Example**
 ```java
