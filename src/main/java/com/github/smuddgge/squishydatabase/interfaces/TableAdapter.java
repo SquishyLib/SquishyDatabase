@@ -5,6 +5,7 @@ import com.github.smuddgge.squishydatabase.record.Record;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +22,14 @@ public abstract class TableAdapter<R extends Record> extends TableSelection<R, D
         if (tableSelection == null) return null;
 
         return tableSelection.getFirstRecord(query);
+    }
+
+    @Override
+    public @NotNull List<R> getRecordList() {
+        TableSelection<R, Database> tableSelection = this.getTableSelection();
+        if (tableSelection == null) return new ArrayList<>();
+
+        return tableSelection.getRecordList();
     }
 
     @Override

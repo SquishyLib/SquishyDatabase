@@ -75,6 +75,35 @@ public class SQLiteTableSelection<R extends Record>
 
     @Override
     @SuppressWarnings("unchecked")
+    public @NotNull List<R> getRecordList() {
+        assert this.getDatabase() != null;
+
+        try {
+
+            // Build the statement.
+            String statement = "SELECT * FROM " + this.getName() + ";";
+
+            // Get the results.
+            ResultSet results = this.getDatabase().executeQuery(statement);
+            if (results == null) return new ArrayList<>();
+
+            // Create a list of records from the result.
+            List<R> recordList = new ArrayList<>();
+
+            while (results.next()) {
+                recordList.add((R) this.createRecord().append(results));
+            }
+            return recordList;
+
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            this.getDatabase().setDisable();
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
     public List<R> getRecordList(@NotNull Query query) {
         assert this.getDatabase() != null;
 

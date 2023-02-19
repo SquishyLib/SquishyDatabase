@@ -89,6 +89,12 @@ public class SQLiteTest {
                 .expect(result.get(0).name, customer1.name)
                 .expect(result.get(1).identifier, customer2.identifier)
                 .expect(result.get(1).name, customer2.name);
+
+        // Test getting all records.
+        List<Customer> allRecords = customerTable.getRecordList();
+
+        new ResultChecker()
+                .expect(allRecords.size() > 0);
     }
 
     @Test

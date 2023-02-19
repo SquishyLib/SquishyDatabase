@@ -38,6 +38,14 @@ public abstract class TableSelection<R extends Record, D extends Database> {
     public abstract @Nullable R getFirstRecord(@NotNull Query query);
 
     /**
+     * Used to get the list of all the records
+     * in the table.
+     *
+     * @return The list of all the records.
+     */
+    public abstract @NotNull List<R> getRecordList();
+
+    /**
      * Used to get the list of records matching a query.
      *
      * @param query The instance of a query.
