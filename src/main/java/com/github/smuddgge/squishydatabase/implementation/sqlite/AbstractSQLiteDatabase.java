@@ -76,12 +76,13 @@ public abstract class AbstractSQLiteDatabase extends Database {
             // Create a connection
             this.connection = DriverManager.getConnection(url);
 
-            Console.log(this.getPrefix() + ConsoleColour.YELLOW + "Connected to the database successfully.");
-
         } catch (SQLException exception) {
             exception.printStackTrace();
             this.setDisable();
+            return;
         }
+
+        Console.log(this.getPrefix() + ConsoleColour.YELLOW + "Connected to the database successfully.");
     }
 
     /**
@@ -166,6 +167,7 @@ public abstract class AbstractSQLiteDatabase extends Database {
             return this.executeStatement(preparedStatement);
 
         } catch (SQLException exception) {
+            Console.error(statement);
             exception.printStackTrace();
             this.setDisable();
             return false;
@@ -185,6 +187,7 @@ public abstract class AbstractSQLiteDatabase extends Database {
             return statement.execute();
 
         } catch (SQLException exception) {
+            Console.error(statement.toString());
             exception.printStackTrace();
             this.setDisable();
             return false;
@@ -206,6 +209,7 @@ public abstract class AbstractSQLiteDatabase extends Database {
             return this.executeQuery(preparedStatement);
 
         } catch (SQLException exception) {
+            Console.error(statement);
             exception.printStackTrace();
             this.setDisable();
             return null;
@@ -231,6 +235,7 @@ public abstract class AbstractSQLiteDatabase extends Database {
             return statement.executeQuery();
 
         } catch (SQLException exception) {
+            Console.error(statement.toString());
             exception.printStackTrace();
             this.setDisable();
             return null;
