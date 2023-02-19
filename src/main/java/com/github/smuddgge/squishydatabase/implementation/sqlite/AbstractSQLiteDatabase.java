@@ -129,7 +129,11 @@ public abstract class AbstractSQLiteDatabase extends Database {
                 throw new ForeignKeyReferenceException(table.getName(), recordField.getKey());
             }
 
-            stringBuilder.append("`{key}` {type} FOREIGN KEY REFERENCES {reference}({reference_field}),".replace("{key}", recordField.getKey()).replace("{type}", type).replace("{reference}", foreignKeyAnnotation.table()).replace("{reference_key}", foreignKeyAnnotation.field()));
+            stringBuilder.append("`{key}` {type} FOREIGN KEY REFERENCES {reference}({reference_field}),"
+                    .replace("{key}", recordField.getKey())
+                    .replace("{type}", type)
+                    .replace("{reference}", foreignKeyAnnotation.table())
+                    .replace("{reference_field}", foreignKeyAnnotation.field()));
         }
 
         stringBuilder.deleteCharAt(stringBuilder.length() - 1);
