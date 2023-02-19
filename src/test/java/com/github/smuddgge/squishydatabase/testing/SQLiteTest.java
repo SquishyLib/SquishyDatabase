@@ -8,6 +8,7 @@ import com.github.smuddgge.squishydatabase.records.Customer;
 import com.github.smuddgge.squishydatabase.Query;
 import com.github.smuddgge.squishydatabase.results.ResultChecker;
 import com.github.smuddgge.squishydatabase.tables.CustomerTable;
+import com.github.smuddgge.squishydatabase.tables.PurchaseTable;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class SQLiteTest {
 
         // Create a new record.
         Customer customer = new Customer();
-        customer.identifier = UUID.randomUUID().toString();
+        customer.uuid = UUID.randomUUID().toString();
         customer.name = "Smudge";
 
         // Insert the record.
@@ -46,14 +47,14 @@ public class SQLiteTest {
 
         // Get the record back from the table.
         Customer result = customerTable.getFirstRecord(
-                new Query().match("identifier", customer.identifier)
+                new Query().match("identifier", customer.uuid)
         );
 
         assert result != null;
 
         // Check results.
         new ResultChecker()
-                .expect(result.identifier, customer.identifier)
+                .expect(result.uuid, customer.uuid)
                 .expect(result.name, customer.name);
     }
 
@@ -65,11 +66,11 @@ public class SQLiteTest {
 
         // Create a new record.
         Customer customer1 = new Customer();
-        customer1.identifier = UUID.randomUUID().toString();
+        customer1.uuid = UUID.randomUUID().toString();
         customer1.name = UUID.randomUUID().toString();
 
         Customer customer2 = new Customer();
-        customer2.identifier = UUID.randomUUID().toString();
+        customer2.uuid = UUID.randomUUID().toString();
         customer2.name = customer1.name;
 
         // Insert the record.
@@ -85,9 +86,9 @@ public class SQLiteTest {
 
         // Check results.
         new ResultChecker()
-                .expect(result.get(0).identifier, customer1.identifier)
+                .expect(result.get(0).uuid, customer1.uuid)
                 .expect(result.get(0).name, customer1.name)
-                .expect(result.get(1).identifier, customer2.identifier)
+                .expect(result.get(1).uuid, customer2.uuid)
                 .expect(result.get(1).name, customer2.name);
 
         // Test getting all records.
@@ -105,7 +106,7 @@ public class SQLiteTest {
 
         // Create a new record.
         Customer customer1 = new Customer();
-        customer1.identifier = UUID.randomUUID().toString();
+        customer1.uuid = UUID.randomUUID().toString();
         customer1.name = UUID.randomUUID().toString();
 
         // Insert the record.
@@ -128,7 +129,7 @@ public class SQLiteTest {
 
         // Create a new record.
         Customer customer1 = new Customer();
-        customer1.identifier = UUID.randomUUID().toString();
+        customer1.uuid = UUID.randomUUID().toString();
         customer1.name = UUID.randomUUID().toString();
 
         // Insert the record.
@@ -151,7 +152,7 @@ public class SQLiteTest {
 
         // Create a new record.
         Customer customer1 = new Customer();
-        customer1.identifier = UUID.randomUUID().toString();
+        customer1.uuid = UUID.randomUUID().toString();
         customer1.name = UUID.randomUUID().toString();
 
         // Insert the record.
@@ -162,7 +163,7 @@ public class SQLiteTest {
 
         // Get the record back from the table.
         int amount = customerTable.getAmountOfRecords(
-                new Query().match("identifier", customer1.identifier)
+                new Query().match("identifier", customer1.uuid)
         );
 
         // Check results.
@@ -177,11 +178,11 @@ public class SQLiteTest {
 
         // Create a new record.
         Customer customer1 = new Customer();
-        customer1.identifier = UUID.randomUUID().toString();
+        customer1.uuid = UUID.randomUUID().toString();
         customer1.name = UUID.randomUUID().toString();
 
         Customer customer2 = new Customer();
-        customer2.identifier = UUID.randomUUID().toString();
+        customer2.uuid = UUID.randomUUID().toString();
         customer2.name = customer1.name;
 
         // Insert the record.
@@ -194,10 +195,17 @@ public class SQLiteTest {
 
         // Get the record back from the table.
         int amount = customerTable.getAmountOfRecords(
-                new Query().match("identifier", customer1.identifier)
+                new Query().match("identifier", customer1.uuid)
         );
 
         // Check results.
         new ResultChecker().expect(amount, 0);
+    }
+
+    @Test
+    public void testForeignKeys() {
+        new ResultChecker()
+                .expect(database.createTable(new CustomerTable()))
+                .expect(database.createTable(new PurchaseTable()));
     }
 }
