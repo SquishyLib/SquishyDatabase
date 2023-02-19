@@ -2,6 +2,7 @@ package com.github.smuddgge.squishydatabase.record;
 
 import com.github.smuddgge.squishydatabase.interfaces.Database;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
@@ -55,6 +56,19 @@ public class Record {
         }
 
         return recordFieldList;
+    }
+
+    /**
+     * Used to get a field from this record.
+     *
+     * @param name The name of the record.
+     * @return The requested record field.
+     */
+    public @Nullable RecordField getField(@NotNull String name) {
+        for (RecordField recordField : this.getFieldList()) {
+            if (recordField.getKey().equals(name)) return recordField;
+        }
+        return null;
     }
 
     /**
