@@ -1,24 +1,55 @@
-[![](https://jitpack.io/v/Smuddgge/SquishyDatabase.svg)](https://jitpack.io/#Smuddgge/SquishyDatabase)
+[![Tag](https://jitpack.io/v/Smuddgge/SquishyDatabase.svg)](https://jitpack.io/#Smuddgge/SquishyDatabase)
 
-```yaml
-status: In Development
-```
-
-Example of the capability's!
-
+**Example**
 ```java
 // Create a database factory of your choice.
-// Change the type of database anytime!
 DatabaseFactory databaseFactory=DatabaseFactory.SQLITE;
 
 // Make new databases using the factory.
-Database database=databaseFactory.create(new DatabaseCredentials().setPath("src/test/resources/database.sqlite3"));
-database.setDebugMode(true);
+Database database = databaseFactory.create(
+    new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
+).setDebugMode(true);
 
-// Create a new table
- CustomerTable customerTable=new CustomerTable();
+// Create a new table.
+CustomerTable customerTable = new CustomerTable();
 database.createTable(customerTable);
 
-// Get the table class back from the database!
-CustomerTable resultTable=database.getTable(CustomerTable.class);
+// Create a record.
+Customer customer = new Customer();
+customer.identifier = UUID.randomUUID().toString();
+
+// Insert the record.
+customerTable.insertRecord(customer);
+```
+
+**Maven**
+```xml
+<repositories>
+    <repository>
+        <id>jitpack.io</id>
+        <url>https://jitpack.io</url>
+    </repository>
+</repositories>
+```
+```xml
+<dependency>
+    <groupId>com.github.smuddgge</groupId>
+    <artifactId>SquishyDatabase</artifactId>
+    <version>Tag</version>
+</dependency>
+```
+
+**Gradle**
+```gradle
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+```gradle
+dependencies {
+    implementation 'com.github.smuddgge:SquishyDatabase:Tag'
+}
 ```
