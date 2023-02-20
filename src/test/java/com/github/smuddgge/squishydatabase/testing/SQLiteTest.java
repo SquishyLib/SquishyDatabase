@@ -47,7 +47,7 @@ public class SQLiteTest {
 
         // Get the record back from the table.
         Customer result = customerTable.getFirstRecord(
-                new Query().match("identifier", customer.uuid)
+                new Query().match("uuid", customer.uuid)
         );
 
         assert result != null;
@@ -163,7 +163,7 @@ public class SQLiteTest {
 
         // Get the record back from the table.
         int amount = customerTable.getAmountOfRecords(
-                new Query().match("identifier", customer1.uuid)
+                new Query().match("uuid", customer1.uuid)
         );
 
         // Check results.
@@ -195,7 +195,7 @@ public class SQLiteTest {
 
         // Get the record back from the table.
         int amount = customerTable.getAmountOfRecords(
-                new Query().match("identifier", customer1.uuid)
+                new Query().match("uuid", customer1.uuid)
         );
 
         // Check results.

@@ -14,6 +14,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents methods not defined in the
@@ -86,6 +89,50 @@ public abstract class AbstractSQLiteDatabase extends Database {
     }
 
     /**
+     * Used to get the column names of a table.
+     *
+     * @param tableName The tables name.
+     * @return The names of the columns.
+     */
+    protected @NotNull List<String> getColumnNames(@NotNull String tableName) {
+        try {
+            ResultSet resultSet = this.executeQuery("PRAGMA table_info(" + tableName + ");");
+            if (resultSet == null) return new ArrayList<>();
+
+            List<String> nameList = new ArrayList<>();
+
+            while (resultSet.next()) {
+                nameList.add(resultSet.getString("name"));
+            }
+
+            return nameList;
+        } catch (SQLException exception) {
+            exception.printStackTrace();
+            this.setDisable();
+            return new ArrayList<>();
+        }
+    }
+
+    /**
+     * Used to check if a table exists in the database.
+     *
+     * @param tableName The name of the table.
+     * @return True if the table exists
+     */
+    public boolean tableExists(String tableName){
+        try {
+            DatabaseMetaData metaData = this.connection.getMetaData();
+            ResultSet resultSet = metaData.getTables(null, null, tableName, null);
+            while (resultSet.next()) {}
+            return resultSet.getRow() > 0;
+        } catch (SQLException exception){
+            exception.printStackTrace();
+            this.setDisable();
+            return false;
+        }
+    }
+
+    /**
      * Used to get a create table statement.
      *
      * @param table The table to get the statement for.
@@ -140,6 +187,21 @@ public abstract class AbstractSQLiteDatabase extends Database {
         stringBuilder.append(");");
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * Used to add a column.
+     *
+     * @param name The name of the table
+     * @param field The instance of the record field to add.
+     */
+    protected void addColumn(String name, RecordField field) {
+        String statement = "ALTER TABLE {table} ADD COLUMN {key} {type};"
+                .replace("{table}", name)
+                .replace("{key}", field.getKey())
+                .replace("{type}", Objects.requireNonNull(this.parseType(field.getValueType())));
+
+        this.executeStatement(statement);
     }
 
     /**

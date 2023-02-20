@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.List;
+import java.util.Objects;
 
 public class SQLiteDatabase extends AbstractSQLiteDatabase {
 
@@ -42,6 +44,21 @@ public class SQLiteDatabase extends AbstractSQLiteDatabase {
 
     @Override
     public boolean createTable(@NotNull TableAdapter<?> table) {
+        // Check if the table exists
+        if (this.tableExists(table.getName())) {
+            List<String> proposedFieldNames = table.createRecord().getFieldNameList();
+            List<String> currentFieldNames = this.getColumnNames(table.getName());
+
+            // Get the difference.
+            proposedFieldNames.removeAll(currentFieldNames);
+
+            if (proposedFieldNames.size() > 0) {
+                for (String recordKey : proposedFieldNames) {
+                    this.addColumn(table.getName(), Objects.requireNonNull(table.createRecord().getField(recordKey)));
+                }
+            }
+        }
+
         // Link the table.
         this.linkTable(table);
 

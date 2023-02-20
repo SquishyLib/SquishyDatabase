@@ -59,6 +59,21 @@ public class Record {
     }
 
     /**
+     * Used to get the list of field names.
+     *
+     * @return The names of the fields in this record.
+     */
+    public List<String> getFieldNameList() {
+        List<String> fieldNameList = new ArrayList<>();
+
+        for (RecordField recordField : this.getFieldList()) {
+            fieldNameList.add(recordField.getKey());
+        }
+
+        return fieldNameList;
+    }
+
+    /**
      * Used to get a field from this record.
      *
      * @param name The name of the record.
