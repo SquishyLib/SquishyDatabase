@@ -1,5 +1,9 @@
 [![](https://jitpack.io/v/Smuddgge/SquishyDatabase.svg)](https://jitpack.io/#Smuddgge/SquishyDatabase)
 
+<div align=center>
+    <a href="https://smuddgge.gitbook.io/squishy-database/"><img src="./graphics/wiki.png" width="512"></a>
+</div>
+
 **Example**
 ```java
 // Create a database factory of your choice.
