@@ -27,11 +27,11 @@ public enum DatabaseFactory {
      * Used to create a sqlite database.
      *
      * @param path The absolute path to the database.
-     * @return The instance of the database type.
+     * @return The instance of a new database.
      */
-    public static DatabaseFactory SQLITE(String path) {
-        DatabaseFactory databaseType = DatabaseFactory.SQLITE;
-        databaseType.databaseCredentials = new DatabaseCredentials().setPath(path);
-        return databaseType;
+    public static Database SQLITE(String path) {
+        return DatabaseFactory.SQLITE.create(
+                new DatabaseCredentials().setPath(path)
+        );
     }
 }
