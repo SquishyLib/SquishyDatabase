@@ -5,6 +5,9 @@ import com.github.smuddgge.squishydatabase.record.Record;
 import com.github.smuddgge.squishydatabase.record.RecordFieldAnnotation;
 import com.github.smuddgge.squishydatabase.record.RecordFieldType;
 
+/**
+ * <h1>Represents a purchase</h1>
+ */
 public class Purchase extends Record {
 
     @RecordFieldAnnotation(type = RecordFieldType.PRIMARY)
