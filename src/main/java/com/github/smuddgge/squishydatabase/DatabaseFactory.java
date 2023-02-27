@@ -31,7 +31,7 @@ public enum DatabaseFactory {
      */
     public static Database SQLITE(String path) {
         return DatabaseFactory.SQLITE.create(
-                new DatabaseCredentials().setPath(path)
+                new DatabaseCredentials(path)
         );
     }
 }

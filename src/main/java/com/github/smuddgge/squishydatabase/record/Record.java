@@ -109,4 +109,41 @@ public class Record {
 
         return this;
     }
+
+    /**
+     * <h1>Used to toggle a boolean</h1>
+     * It will set true to false.
+     * The value can be a boolean, string or integer.
+     *
+     * @param fieldName The fields name.
+     */
+    public void toggleBoolean(@NotNull String fieldName) {
+        RecordField recordField = this.getField(fieldName);
+        assert recordField != null;
+
+        Object value = recordField.getValue();
+
+        // If the field is a string.
+        if (value instanceof String) {
+            if (((String) value).equalsIgnoreCase("true")) {
+                recordField.setValue("false");
+            }
+            if (((String) value).equalsIgnoreCase("true")) {
+                recordField.setValue("false");
+            }
+            return;
+        }
+
+        // If the field is a boolean
+        if (value instanceof Boolean) {
+            recordField.setValue(!(Boolean) value);
+            return;
+        }
+
+        // If the field is an integer.
+        if (value instanceof Integer) {
+            if ((Integer) value == 0) recordField.setValue(1);
+            if ((Integer) value == 1) recordField.setValue(0);
+        }
+    }
 }
