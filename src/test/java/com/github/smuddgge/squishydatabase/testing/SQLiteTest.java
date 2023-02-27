@@ -28,7 +28,7 @@ public class SQLiteTest {
      * Create database.
      */
     public static Database database = databaseFactory.create(
-            new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
+            new DatabaseCredentials("src/test/resources/database.sqlite3")
     ).setDebugMode(true);
 
     @Test

@@ -24,7 +24,7 @@ public class SQLiteTableSelection<R extends Record>
     /**
      * The tables name.
      */
-    private final String name;
+    private final @NotNull String name;
 
     /**
      * Used to initiate a sqlite table selection.
