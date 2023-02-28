@@ -239,7 +239,37 @@ public class SQLiteTest {
     }
 
     @Test
-    public void testToggleBoolean() {
-        
+    public void testUpdateRecord() {
+        // Create table.
+        CustomerTable customerTable = new CustomerTable();
+        database.createTable(customerTable);
+
+        // Create a new record.
+        Customer customer1 = new Customer();
+        customer1.uuid = UUID.randomUUID().toString();
+        customer1.name = UUID.randomUUID().toString();
+
+        // Insert the record.
+        customerTable.insertRecord(customer1);
+
+        // Get record
+        Customer customerResult = customerTable.getFirstRecord(
+                new Query().match("uuid", customer1.uuid)
+        );
+        assert customerResult != null;
+
+        // Change record.
+        customerResult.name = UUID.randomUUID().toString();
+
+        // Insert record.
+        customerTable.insertRecord(customerResult);
+
+        // Get the record back from the table.
+        Customer customerResult2 = customerTable.getFirstRecord(
+                new Query().match("uuid", customer1.uuid)
+        );
+
+        // Check results.
+        new ResultChecker().expect(customerResult2.name, customerResult.name);
     }
 }

@@ -251,6 +251,7 @@ public abstract class AbstractSQLiteDatabase extends Database {
         try {
             // Execute the statement.
             statement.execute();
+            return true;
 
         } catch (SQLException exception) {
             Console.error(statement.toString());
@@ -258,8 +259,6 @@ public abstract class AbstractSQLiteDatabase extends Database {
             this.setDisable();
             return false;
         }
-
-        return true;
     }
 
     /**

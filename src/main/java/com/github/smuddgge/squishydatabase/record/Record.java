@@ -116,7 +116,7 @@ public class Record {
      *
      * @param variable The instance of a variable.
      */
-    public static Object getOpposite(@NotNull Object variable) {
+    public static @NotNull Object getOpposite(@NotNull Object variable) {
 
         // If the field is a string.
         if (variable instanceof String value) {
@@ -131,9 +131,9 @@ public class Record {
 
         // If the field is an integer.
         if (variable instanceof Integer value) {
-            return value == 1 ? 1 : 0;
+            return value == 1 ? 0 : 1;
         }
 
-        return null;
+        throw new RuntimeException("Variable isn't a string, boolean or integer.");
     }
 }

@@ -149,7 +149,7 @@ public abstract class AbstractSQLiteTableSelection<R extends Record>
         statementBuilder.replace(statementBuilder.length() - 2, statementBuilder.length(), "");
 
         // Combine the builders
-        statementBuilder.append(" WHERE").append(" ? = ?;");
+        statementBuilder.append(" WHERE").append(" ").append(record.getPrimaryKey().getKey()).append(" = ?;");
 
         // Build prepared statement
         PreparedStatement preparedStatement = this.getDatabase().getConnection()
@@ -164,8 +164,7 @@ public abstract class AbstractSQLiteTableSelection<R extends Record>
 
         // Set the primary key.
         RecordField primaryKey1 = record.getFieldList(RecordFieldType.PRIMARY).get(0);
-        preparedStatement.setObject(index, primaryKey1.getKey());
-        preparedStatement.setObject(index + 1, primaryKey1.getValue());
+        preparedStatement.setObject(index, primaryKey1.getValue());
 
         // Execute the statement.
         return this.getDatabase().executeStatement(preparedStatement);
