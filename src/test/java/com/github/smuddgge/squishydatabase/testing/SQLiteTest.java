@@ -59,6 +59,35 @@ public class SQLiteTest {
     }
 
     @Test
+    public void testGetFirstRecord2() {
+        // Create table.
+        CustomerTable customerTable = new CustomerTable();
+        database.createTable(customerTable);
+
+        // Create a new record.
+        Customer customer = new Customer();
+        customer.uuid = UUID.randomUUID().toString();
+        customer.name = "Smudge";
+
+        // Insert the record.
+        customerTable.insertRecord(customer);
+
+        // Get the record back from the table.
+        Customer result = customerTable.getFirstRecord(
+                new Query()
+                        .match("uuid", customer.uuid)
+                        .match("name", customer.name)
+        );
+
+        assert result != null;
+
+        // Check results.
+        new ResultChecker()
+                .expect(result.uuid, customer.uuid)
+                .expect(result.name, customer.name);
+    }
+
+    @Test
     public void testGetRecordList() {
         // Create table.
         CustomerTable customerTable = new CustomerTable();

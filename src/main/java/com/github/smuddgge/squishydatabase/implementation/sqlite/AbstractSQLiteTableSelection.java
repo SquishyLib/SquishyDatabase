@@ -1,11 +1,14 @@
 package com.github.smuddgge.squishydatabase.implementation.sqlite;
 
 import com.github.smuddgge.squishydatabase.Query;
+import com.github.smuddgge.squishydatabase.console.Console;
 import com.github.smuddgge.squishydatabase.interfaces.TableSelection;
 import com.github.smuddgge.squishydatabase.record.Record;
 import com.github.smuddgge.squishydatabase.record.RecordField;
 import com.github.smuddgge.squishydatabase.record.RecordFieldType;
 import org.jetbrains.annotations.NotNull;
+import org.sqlite.SQLiteErrorCode;
+import org.sqlite.SQLiteException;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -35,11 +38,11 @@ public abstract class AbstractSQLiteTableSelection<R extends Record>
         StringBuilder statement = new StringBuilder();
 
         for (Map.Entry<String, Object> map : query.get().entrySet()) {
-            statement.append(map.getKey()).append(" = ? AND");
+            statement.append(map.getKey()).append(" = ? AND ");
         }
 
         // Delete the last ' AND'
-        statement.replace(statement.length() - 4, statement.length(), "");
+        statement.replace(statement.length() - 5, statement.length(), "");
 
         return statement.toString();
     }
@@ -57,16 +60,23 @@ public abstract class AbstractSQLiteTableSelection<R extends Record>
         assert this.getDatabase().getConnection() != null;
 
         // Prepare the statement.
-        PreparedStatement preparedStatement = this.getDatabase()
-                .getConnection().prepareStatement(statement);
+        try {
+            PreparedStatement preparedStatement = this.getDatabase()
+                    .getConnection().prepareStatement(statement);
 
-        int index = 1;
-        for (Map.Entry<String, Object> map : query.get().entrySet()) {
-            preparedStatement.setObject(index, map.getValue());
-            index++;
+            int index = 1;
+            for (Map.Entry<String, Object> map : query.get().entrySet()) {
+                preparedStatement.setObject(index, map.getValue());
+                index++;
+            }
+
+            return preparedStatement;
+
+        } catch (Exception exception) {
+            Console.error("Statement : " + statement);
+            exception.printStackTrace();
+            throw new SQLiteException(statement, SQLiteErrorCode.SQLITE_ABORT);
         }
-
-        return preparedStatement;
     }
 
     /**
