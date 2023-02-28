@@ -112,38 +112,28 @@ public class Record {
 
     /**
      * <h1>Used to toggle a boolean</h1>
-     * It will set true to false.
-     * The value can be a boolean, string or integer.
+     * It return true when false and false when true.
      *
-     * @param fieldName The fields name.
+     * @param variable The instance of a variable.
      */
-    public void toggleBoolean(@NotNull String fieldName) {
-        RecordField recordField = this.getField(fieldName);
-        assert recordField != null;
-
-        Object value = recordField.getValue();
+    public static Object getOpposite(@NotNull Object variable) {
 
         // If the field is a string.
-        if (value instanceof String) {
-            if (((String) value).equalsIgnoreCase("true")) {
-                recordField.setValue("false");
-            }
-            if (((String) value).equalsIgnoreCase("true")) {
-                recordField.setValue("false");
-            }
-            return;
+        if (variable instanceof String value) {
+            if (value.equalsIgnoreCase("true")) return "false";
+            return "true";
         }
 
         // If the field is a boolean
-        if (value instanceof Boolean) {
-            recordField.setValue(!(Boolean) value);
-            return;
+        if (variable instanceof Boolean value) {
+            return !value;
         }
 
         // If the field is an integer.
-        if (value instanceof Integer) {
-            if ((Integer) value == 0) recordField.setValue(1);
-            if ((Integer) value == 1) recordField.setValue(0);
+        if (variable instanceof Integer value) {
+            return value == 1 ? 1 : 0;
         }
+
+        return null;
     }
 }

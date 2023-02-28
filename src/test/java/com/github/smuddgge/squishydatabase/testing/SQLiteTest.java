@@ -237,4 +237,9 @@ public class SQLiteTest {
                 .expect(database.createTable(new CustomerTable()))
                 .expect(database.createTable(new PurchaseTable()));
     }
+
+    @Test
+    public void testToggleBoolean() {
+        
+    }
 }
