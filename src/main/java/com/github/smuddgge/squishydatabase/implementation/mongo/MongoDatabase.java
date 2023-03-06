@@ -9,6 +9,9 @@ import com.mongodb.MongoClient;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * <h1>Represents a mongo database</h1>
+ */
 public class MongoDatabase extends Database {
 
     private MongoClient mongoClient;

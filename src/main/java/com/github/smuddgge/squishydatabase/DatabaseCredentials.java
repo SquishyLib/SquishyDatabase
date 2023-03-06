@@ -5,7 +5,7 @@ import com.mongodb.lang.Nullable;
 import java.io.File;
 
 /**
- * Represents a databases credentials.
+ * <h1>Represents a databases credentials</h1>
  * Contains values to connected to a database.
  */
 public class DatabaseCredentials {
