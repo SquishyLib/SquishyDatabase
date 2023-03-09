@@ -117,7 +117,7 @@ public class SQLiteTableSelection<R extends Record>
             PreparedStatement preparedStatement = this.appendQuery(statement, query);
 
             // Get the results.
-            ResultSet results = preparedStatement.executeQuery();
+            ResultSet results = this.getDatabase().executeQuery(preparedStatement);
             if (results == null) return null;
 
             // Create a list of records from the result.
