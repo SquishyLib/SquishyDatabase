@@ -1,4 +1,5 @@
 [![](https://jitpack.io/v/Smuddgge/SquishyDatabase.svg)](https://jitpack.io/#Smuddgge/SquishyDatabase)
+[![CodeFactor](https://www.codefactor.io/repository/github/smuddgge/squishydatabase/badge)](https://www.codefactor.io/repository/github/smuddgge/squishydatabase)
 
 <div align=center>
     <a href="https://smuddgge.gitbook.io/squishy-database/"><img src="./graphics/wiki.png" width="512"></a>
