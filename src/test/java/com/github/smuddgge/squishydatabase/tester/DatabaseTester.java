@@ -75,8 +75,6 @@ public class DatabaseTester {
     /**
      * Used to test creating a table in the database.
      */
-    @Tag("test")
-    @Test
     public void testCreateTable() {
         this.customerTable = new CustomerTable();
         database.createTable(customerTable);
@@ -85,7 +83,6 @@ public class DatabaseTester {
     /**
      * Used to test creating records in the database.
      */
-    @Test
     public void testCreateRecords() {
         // The name in both customers is the same
         // to test getting a list of records.
@@ -106,7 +103,6 @@ public class DatabaseTester {
      * Used to test getting the first record from the database
      * after inserting a record.
      */
-    @Test
     public void testGetFirstRecord() {
         // Get a record from the table.
         Customer result = this.customerTable.getFirstRecord(
@@ -124,7 +120,6 @@ public class DatabaseTester {
     /**
      * Used to get the first record in the database which matches two query's.
      */
-    @Test
     public void testGetFirstRecordWithTwoMatches() {
         // Get a record from the table.
         Customer result = this.customerTable.getFirstRecord(
@@ -142,7 +137,9 @@ public class DatabaseTester {
 
     }
 
-    @Testable
+    /**
+     * Used to test getting a record list from the database.
+     */
     public void testGetRecordList() {
         // Get the records from the table.
         List<Customer> result = this.customerTable.getRecordList(
@@ -164,7 +161,9 @@ public class DatabaseTester {
         new ResultChecker().expect(allRecords.size() > 0);
     }
 
-    @Testable
+    /**
+     * Used to test requesting the amount of records from the database.
+     */
     public void testGetAmountOfRecords() {
         // Get the record back from the table.
         int amount = this.customerTable.getAmountOfRecords();
@@ -176,7 +175,9 @@ public class DatabaseTester {
         new ResultChecker().expect(amount > 0);
     }
 
-    @Testable
+    /**
+     * Used to test requesting the amount of records given a query.
+     */
     public void testGetAmountOfRecordsWithQuery() {
         // Get the record back from the table.
         int amount = this.customerTable.getAmountOfRecords(
@@ -193,7 +194,6 @@ public class DatabaseTester {
     /**
      * Used to test removing a record from the database.
      */
-    @Testable
     public void testRemoveRecord() {
         // Create a new record.
         Customer customer3 = new Customer();
@@ -215,7 +215,9 @@ public class DatabaseTester {
         new ResultChecker().expect(amount, 0);
     }
 
-    @Testable
+    /**
+     * Used to test removing a record from the database given a query.
+     */
     public void testRemoveRecordWithQuery() {
         // Create a new record.
         Customer customer3 = new Customer();
@@ -237,5 +239,30 @@ public class DatabaseTester {
 
         // Check results.
         new ResultChecker().expect(amount, 0);
+    }
+
+    /**
+     * Used to test updating a record in the database.
+     */
+    public void testUpdateRecord() {
+        // Get record
+        Customer customerResult = customerTable.getFirstRecord(
+                new Query().match("uuid", this.customer1.uuid)
+        );
+        assert customerResult != null;
+
+        // Change record.
+        customerResult.name = UUID.randomUUID().toString();
+
+        // Insert record.
+        customerTable.insertRecord(customerResult);
+
+        // Get the record back from the table.
+        Customer customerResult2 = customerTable.getFirstRecord(
+                new Query().match("uuid", customer1.uuid)
+        );
+
+        // Check results.
+        new ResultChecker().expect(customerResult2.name, customerResult.name);
     }
 }

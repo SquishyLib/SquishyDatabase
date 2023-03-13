@@ -82,6 +82,16 @@ public record RecordField(Record record, Field field) {
     }
 
     /**
+     * Used to set this value to the oposite value.
+     * This method uses the utility get oposite from {@link Record}.
+     * 
+     * @return True if succsessfull.
+     */
+    public boolean setOposite() {
+        return this.setValue(Record.getOpposite(this.getValue()));
+    }
+
+    /**
      * Used to check if the field has a field annotation.
      *
      * @return True if the field has {@link RecordFieldAnnotation}
