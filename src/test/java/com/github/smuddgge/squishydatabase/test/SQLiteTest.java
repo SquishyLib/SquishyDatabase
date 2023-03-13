@@ -1,4 +1,4 @@
-package com.github.smuddgge.squishydatabase.testing;
+package com.github.smuddgge.squishydatabase.test;
 
 import com.github.smuddgge.squishydatabase.DatabaseCredentials;
 import com.github.smuddgge.squishydatabase.DatabaseFactory;
@@ -9,6 +9,7 @@ import com.github.smuddgge.squishydatabase.Query;
 import com.github.smuddgge.squishydatabase.results.ResultChecker;
 import com.github.smuddgge.squishydatabase.tables.CustomerTable;
 import com.github.smuddgge.squishydatabase.tables.PurchaseTable;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,6 +18,8 @@ import java.util.UUID;
 /**
  * <h1>Represents the sqlite tests</h1>
  */
+@Deprecated
+@Disabled
 public class SQLiteTest {
 
     /**

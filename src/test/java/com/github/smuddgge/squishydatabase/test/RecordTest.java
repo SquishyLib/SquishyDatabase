@@ -1,4 +1,4 @@
-package com.github.smuddgge.squishydatabase.testing;
+package com.github.smuddgge.squishydatabase.test;
 
 import com.github.smuddgge.squishydatabase.record.Record;
 import com.github.smuddgge.squishydatabase.results.ResultChecker;

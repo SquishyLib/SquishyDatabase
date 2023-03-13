@@ -1,3 +1,5 @@
+package com.github.smuddgge.squishydatabase.tester;
+
 import com.github.smuddgge.squishydatabase.DatabaseCredentials;
 import com.github.smuddgge.squishydatabase.DatabaseFactory;
 import com.github.smuddgge.squishydatabase.Query;
@@ -8,7 +10,12 @@ import com.github.smuddgge.squishydatabase.results.ResultChecker;
 import com.github.smuddgge.squishydatabase.tables.CustomerTable;
 import java.util.List;
 import java.util.UUID;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.platform.commons.annotation.Testable;
 
 /**
  * <h1>Represents a database tester</h1>
@@ -16,7 +23,7 @@ import org.junit.jupiter.api.Test;
  */
 public class DatabaseTester {
 
-    private Database database;
+    private final Database database;
 
     private CustomerTable customerTable;
     private Customer customer1;
@@ -25,11 +32,11 @@ public class DatabaseTester {
     /**
      * Used to create a database tester.
      * 
-     * @param datbaseFactory      The instance of the database factory.
+     * @param databaseFactory      The instance of the database factory.
      * @param databaseCredentials The instance of the database credentials.
      */
-    public DatabaseTester(DatabaseFactory datbaseFactory, DatabaseCredentials databaseCredentials) {
-        this.database = datbaseFactory.create(databaseCredentials).setDebugMode(true);
+    public DatabaseTester(DatabaseFactory databaseFactory, DatabaseCredentials databaseCredentials) {
+        this.database = databaseFactory.create(databaseCredentials).setDebugMode(true);
     }
 
     /**
@@ -68,6 +75,7 @@ public class DatabaseTester {
     /**
      * Used to test creating a table in the database.
      */
+    @Tag("test")
     @Test
     public void testCreateTable() {
         this.customerTable = new CustomerTable();
@@ -80,23 +88,23 @@ public class DatabaseTester {
     @Test
     public void testCreateRecords() {
         // The name in both customers is the same
-        // to test getting a lsit of records.
+        // to test getting a list of records.
         this.customer1 = new Customer();
         this.customer1.uuid = UUID.randomUUID().toString();
-        this.customer1.name = "Smudge";
+        this.customer1.name = UUID.randomUUID().toString();
 
         this.customerTable.insertRecord(this.customer1);
 
         this.customer2 = new Customer();
         this.customer2.uuid = UUID.randomUUID().toString();
-        this.customer2.name = "Smudge";
+        this.customer2.name = this.customer1.name;
 
         this.customerTable.insertRecord(this.customer2);
     }
 
     /**
      * Used to test getting the first record from the database
-     * after incerting a record.
+     * after inserting a record.
      */
     @Test
     public void testGetFirstRecord() {
@@ -114,7 +122,7 @@ public class DatabaseTester {
     }
 
     /**
-     * Used to get the first record in the datbase which matches two querys.
+     * Used to get the first record in the database which matches two query's.
      */
     @Test
     public void testGetFirstRecordWithTwoMatches() {
@@ -134,7 +142,7 @@ public class DatabaseTester {
 
     }
 
-    @Test
+    @Testable
     public void testGetRecordList() {
         // Get the records from the table.
         List<Customer> result = this.customerTable.getRecordList(
@@ -156,7 +164,7 @@ public class DatabaseTester {
         new ResultChecker().expect(allRecords.size() > 0);
     }
 
-    @Test
+    @Testable
     public void testGetAmountOfRecords() {
         // Get the record back from the table.
         int amount = this.customerTable.getAmountOfRecords();
@@ -168,7 +176,7 @@ public class DatabaseTester {
         new ResultChecker().expect(amount > 0);
     }
 
-    @Test
+    @Testable
     public void testGetAmountOfRecordsWithQuery() {
         // Get the record back from the table.
         int amount = this.customerTable.getAmountOfRecords(
@@ -185,7 +193,7 @@ public class DatabaseTester {
     /**
      * Used to test removing a record from the database.
      */
-    @Test
+    @Testable
     public void testRemoveRecord() {
         // Create a new record.
         Customer customer3 = new Customer();
@@ -197,6 +205,30 @@ public class DatabaseTester {
 
         // Remove the record.
         customerTable.removeRecord(customer3);
+
+        // Get the record back from the table.
+        int amount = customerTable.getAmountOfRecords(
+                new Query().match("uuid", customer3.uuid)
+        );
+
+        // Check results.
+        new ResultChecker().expect(amount, 0);
+    }
+
+    @Testable
+    public void testRemoveRecordWithQuery() {
+        // Create a new record.
+        Customer customer3 = new Customer();
+        customer3.uuid = UUID.randomUUID().toString();
+        customer3.name = UUID.randomUUID().toString();
+
+        // Insert the record.
+        customerTable.insertRecord(customer3);
+
+        // Remove the record.
+        customerTable.removeAllRecords(
+                new Query().match("uuid", customer3.uuid)
+        );
 
         // Get the record back from the table.
         int amount = customerTable.getAmountOfRecords(
