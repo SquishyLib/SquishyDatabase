@@ -1,6 +1,5 @@
 package com.github.smuddgge.squishydatabase;
 
-import com.mongodb.lang.Nullable;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;

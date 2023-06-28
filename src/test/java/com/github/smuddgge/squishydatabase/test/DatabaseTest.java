@@ -3,6 +3,7 @@ package com.github.smuddgge.squishydatabase.test;
 import com.github.smuddgge.squishydatabase.DatabaseFactory;
 import com.github.smuddgge.squishydatabase.interfaces.Database;
 import com.github.smuddgge.squishydatabase.tester.DatabaseTester;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
