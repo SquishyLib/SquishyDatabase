@@ -12,7 +12,7 @@ DatabaseFactory databaseFactory=DatabaseFactory.SQLITE;
 
 // Make new databases using the factory.
 Database database = databaseFactory.create(
-    new DatabaseCredentials().setPath("src/test/resources/database.sqlite3")
+    DatabaseCredentials().SQLITE("src/test/resources/database.sqlite3")
 ).setDebugMode(true);
 
 // Create a new table.
