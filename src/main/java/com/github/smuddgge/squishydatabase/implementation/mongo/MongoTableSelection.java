@@ -44,6 +44,8 @@ public class MongoTableSelection<R extends Record> extends AbstractMongoTableSel
         // Get document.
         Document document = this.getCollection().find(Filters.and(filterList)).first();
 
+        if (document == null) return null;
+
         // Convert to record.
         String json = document.toJson();
         Gson gson = new Gson();
@@ -56,7 +58,7 @@ public class MongoTableSelection<R extends Record> extends AbstractMongoTableSel
         // Get document.
         FindIterable<Document> documentList = this.getCollection().find();
 
-        // Get list of records.
+        // Get a list of records.
         List<R> recordList = new ArrayList<>();
 
         for (Document document : documentList) {
@@ -76,7 +78,7 @@ public class MongoTableSelection<R extends Record> extends AbstractMongoTableSel
         // Get document.
         FindIterable<Document> documentList = this.getCollection().find(Filters.and(filterList));
 
-        // Get list of records.
+        // Get a list of records.
         List<R> recordList = new ArrayList<>();
 
         for (Document document : documentList) {

@@ -1,6 +1,7 @@
 package com.github.smuddgge.squishydatabase.implementation.mongo;
 
 import com.github.smuddgge.squishydatabase.DatabaseFactory;
+import com.github.smuddgge.squishydatabase.console.Console;
 import com.github.smuddgge.squishydatabase.console.ConsoleColour;
 import com.github.smuddgge.squishydatabase.interfaces.Database;
 import com.github.smuddgge.squishydatabase.interfaces.TableAdapter;
@@ -38,6 +39,9 @@ public class MongoDatabase extends AbstractMongoDatabase {
 
         // Create database.
         this.database = client.getDatabase(this.databaseName);
+
+        // Log.
+        Console.log(this.getPrefix() + ConsoleColour.YELLOW + "Connected to the database successfully.");
         return this;
     }
 
@@ -46,7 +50,7 @@ public class MongoDatabase extends AbstractMongoDatabase {
         if (this.isDisabled()) return false;
 
         try {
-            // Create collection if it doesn't exist.
+            // Create a collection if it doesn't exist.
             if (!this.database.listCollectionNames().into(new ArrayList<>())
                     .contains(table.getName())) {
 
