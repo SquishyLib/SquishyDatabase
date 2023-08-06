@@ -37,4 +37,4 @@ target/*
 src/test/resources/database
 
 # Testing that contains sensative info.
-ignore/*
+DatabaseTest.java
