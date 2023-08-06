@@ -8,14 +8,9 @@ import com.github.smuddgge.squishydatabase.interfaces.Database;
 import com.github.smuddgge.squishydatabase.records.Customer;
 import com.github.smuddgge.squishydatabase.results.ResultChecker;
 import com.github.smuddgge.squishydatabase.tables.CustomerTable;
+
 import java.util.List;
 import java.util.UUID;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
-import org.junit.platform.commons.annotation.Testable;
 
 /**
  * <h1>Represents a database tester</h1>
@@ -31,8 +26,8 @@ public class DatabaseTester {
 
     /**
      * Used to create a database tester.
-     * 
-     * @param databaseFactory      The instance of the database factory.
+     *
+     * @param databaseFactory     The instance of the database factory.
      * @param databaseCredentials The instance of the database credentials.
      */
     public DatabaseTester(DatabaseFactory databaseFactory, DatabaseCredentials databaseCredentials) {
@@ -41,7 +36,7 @@ public class DatabaseTester {
 
     /**
      * Used to create a database tester.
-     * 
+     *
      * @param database The instance of a database.
      */
     public DatabaseTester(Database database) {
@@ -50,11 +45,11 @@ public class DatabaseTester {
 
     /**
      * Used to run all the database tests.
-     * 
+     *
      * @return This instance of the database tester.
      */
     public DatabaseTester runTests() {
-        
+
         // This also ensures the table has been created for other tests.
         this.testCreateTable();
 
@@ -68,6 +63,8 @@ public class DatabaseTester {
         this.testGetAmountOfRecords();
         this.testGetAmountOfRecordsWithQuery();
         this.testRemoveRecord();
+        this.testRemoveRecordWithQuery();
+        this.testUpdateRecord();
 
         return this;
     }
@@ -123,9 +120,9 @@ public class DatabaseTester {
     public void testGetFirstRecordWithTwoMatches() {
         // Get a record from the table.
         Customer result = this.customerTable.getFirstRecord(
-            new Query()
-                .match("uuid", this.customer1.uuid)
-                .match("name", this.customer1.name)
+                new Query()
+                        .match("uuid", this.customer1.uuid)
+                        .match("name", this.customer1.name)
         );
 
         assert result != null;

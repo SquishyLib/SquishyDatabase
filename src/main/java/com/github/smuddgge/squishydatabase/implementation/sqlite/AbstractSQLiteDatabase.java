@@ -119,13 +119,14 @@ public abstract class AbstractSQLiteDatabase extends Database {
      * @param tableName The name of the table.
      * @return True if the table exists
      */
-    public boolean tableExists(String tableName){
+    public boolean tableExists(String tableName) {
         try {
             DatabaseMetaData metaData = this.connection.getMetaData();
             ResultSet resultSet = metaData.getTables(null, null, tableName, null);
-            while (resultSet.next()) {}
+            while (resultSet.next()) {
+            }
             return resultSet.getRow() > 0;
-        } catch (SQLException exception){
+        } catch (SQLException exception) {
             exception.printStackTrace();
             this.setDisable();
             return false;
@@ -192,7 +193,7 @@ public abstract class AbstractSQLiteDatabase extends Database {
     /**
      * Used to add a column.
      *
-     * @param name The name of the table
+     * @param name  The name of the table
      * @param field The instance of the record field to add.
      */
     protected void addColumn(String name, RecordField field) {

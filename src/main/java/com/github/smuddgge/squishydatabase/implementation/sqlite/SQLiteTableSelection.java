@@ -1,8 +1,8 @@
 package com.github.smuddgge.squishydatabase.implementation.sqlite;
 
+import com.github.smuddgge.squishydatabase.Query;
 import com.github.smuddgge.squishydatabase.interfaces.TableSelection;
 import com.github.smuddgge.squishydatabase.record.Record;
-import com.github.smuddgge.squishydatabase.Query;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

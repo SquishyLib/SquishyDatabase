@@ -1,5 +1,6 @@
 package com.github.smuddgge.squishydatabase.record;
 
+import com.github.smuddgge.squishydatabase.Query;
 import com.github.smuddgge.squishydatabase.interfaces.Database;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -108,6 +109,22 @@ public class Record {
         }
 
         return this;
+    }
+
+    /**
+     * Used to get the record as a query.
+     *
+     * @return The requested query.
+     */
+    public @NotNull Query asQuery() {
+        Query query = new Query();
+
+        for (RecordField field : this.getFieldList()) {
+            if (field.getValue() == null) continue;
+            query.match(field.getKey(), field.getValue());
+        }
+
+        return query;
     }
 
     /**
