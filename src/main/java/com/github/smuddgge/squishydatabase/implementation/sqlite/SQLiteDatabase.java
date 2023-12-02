@@ -17,6 +17,9 @@ import java.util.Objects;
 
 public class SQLiteDatabase extends AbstractSQLiteDatabase {
 
+    public SQLiteDatabase() {
+    }
+
     /**
      * Used to create a sqlite database.
      *

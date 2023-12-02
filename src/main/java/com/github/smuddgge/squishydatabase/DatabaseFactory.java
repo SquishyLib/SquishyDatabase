@@ -1,6 +1,7 @@
 package com.github.smuddgge.squishydatabase;
 
 import com.github.smuddgge.squishydatabase.implementation.mongo.MongoDatabase;
+import com.github.smuddgge.squishydatabase.implementation.mysql.MySQLDatabase;
 import com.github.smuddgge.squishydatabase.implementation.sqlite.SQLiteDatabase;
 import com.github.smuddgge.squishydatabase.interfaces.Database;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +15,12 @@ public enum DatabaseFactory {
         @Override
         public @NotNull Database create(@NotNull DatabaseCredentials databaseCredentials) {
             return SQLiteDatabase.extract(databaseCredentials).setup();
+        }
+    }, MYSQL {
+        @Override
+        public @NotNull Database create(@NotNull DatabaseCredentials databaseCredentials) {
+            assert databaseCredentials.getPassword() != null;
+            return new MySQLDatabase(databaseCredentials.getConnectionString(), databaseCredentials.getDatabaseUser(), databaseCredentials.getPassword());
         }
     }, MONGO {
         @Override
