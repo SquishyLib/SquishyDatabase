@@ -1,8 +1,8 @@
 package com.github.smuddgge.squishydatabase.records;
 
 import com.github.smuddgge.squishydatabase.record.Record;
-import com.github.smuddgge.squishydatabase.record.RecordFieldAnnotation;
-import com.github.smuddgge.squishydatabase.record.RecordFieldIgnoreAnnotation;
+import com.github.smuddgge.squishydatabase.record.Field;
+import com.github.smuddgge.squishydatabase.record.IgnoreField;
 import com.github.smuddgge.squishydatabase.record.RecordFieldType;
 
 /**
@@ -10,11 +10,11 @@ import com.github.smuddgge.squishydatabase.record.RecordFieldType;
  */
 public class Customer extends Record {
 
-    @RecordFieldAnnotation(type = RecordFieldType.PRIMARY)
+    @Field(type = RecordFieldType.PRIMARY)
     public String uuid;
 
     public String name;
 
-    @RecordFieldIgnoreAnnotation
+    @IgnoreField
     public Object dataStore;
 }

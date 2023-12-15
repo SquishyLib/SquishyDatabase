@@ -9,5 +9,5 @@ import java.lang.annotation.RetentionPolicy;
  * The value will not be saved in the database.
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RecordFieldIgnoreAnnotation {
+public @interface IgnoreField {
 }

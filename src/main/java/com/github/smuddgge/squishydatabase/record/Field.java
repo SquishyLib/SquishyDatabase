@@ -11,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
  * to {@link RecordFieldType#FIELD}.
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface RecordFieldAnnotation {
+public @interface Field {
 
     /**
      * Used to set what type of field the field is.

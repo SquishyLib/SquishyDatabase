@@ -8,7 +8,7 @@ import java.lang.annotation.RetentionPolicy;
  * a foreign key.
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface ForeignKeyAnnotation {
+public @interface ForeignField {
 
     /**
      * @return The name of the table the foreign

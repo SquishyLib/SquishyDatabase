@@ -5,7 +5,7 @@ import com.github.smuddgge.squishydatabase.console.ConsoleColour;
 import com.github.smuddgge.squishydatabase.errors.ForeignKeyReferenceException;
 import com.github.smuddgge.squishydatabase.interfaces.Database;
 import com.github.smuddgge.squishydatabase.interfaces.TableAdapter;
-import com.github.smuddgge.squishydatabase.record.ForeignKeyAnnotation;
+import com.github.smuddgge.squishydatabase.record.ForeignField;
 import com.github.smuddgge.squishydatabase.record.Record;
 import com.github.smuddgge.squishydatabase.record.RecordField;
 import com.github.smuddgge.squishydatabase.record.RecordFieldType;
@@ -172,7 +172,7 @@ public abstract class AbstractSQLiteDatabase extends Database {
 
             if (type == null) continue;
 
-            ForeignKeyAnnotation foreignKeyAnnotation = recordField.getForeignKeyReference();
+            ForeignField foreignKeyAnnotation = recordField.getForeignKeyReference();
             if (foreignKeyAnnotation == null) {
                 throw new ForeignKeyReferenceException(table.getName(), recordField.getKey());
             }

@@ -18,7 +18,7 @@ public class Record {
 
     /**
      * Used to get all the record fields.
-     * The {@link RecordFieldIgnoreAnnotation} fields will be left out.
+     * The {@link IgnoreField} fields will be left out.
      *
      * @return The full list of record fields.
      */
@@ -39,7 +39,7 @@ public class Record {
     /**
      * Used to get the record field list that only contains
      * one type of field.
-     * The {@link RecordFieldIgnoreAnnotation} fields will be left out.
+     * The {@link IgnoreField} fields will be left out.
      *
      * @param type The type of field to get.
      * @return The list of fields with the specific

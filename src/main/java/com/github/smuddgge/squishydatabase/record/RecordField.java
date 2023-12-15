@@ -2,13 +2,11 @@ package com.github.smuddgge.squishydatabase.record;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Field;
-
 /**
  * <h1>Represents a field in a record</h1>
  * A field can be used to set and get values.
  */
-public record RecordField(Record record, Field field) {
+public record RecordField(Record record, java.lang.reflect.Field field) {
 
     /**
      * Used to get the key of the field.
@@ -51,7 +49,7 @@ public record RecordField(Record record, Field field) {
      */
     public RecordFieldType getFieldType() {
         if (!this.hasFieldAnnotation()) return RecordFieldType.FIELD;
-        return this.field.getAnnotation(RecordFieldAnnotation.class).type();
+        return this.field.getAnnotation(Field.class).type();
     }
 
     /**
@@ -61,8 +59,8 @@ public record RecordField(Record record, Field field) {
      * @return The requested reference.
      * This will return null if there is no reference.
      */
-    public @Nullable ForeignKeyAnnotation getForeignKeyReference() {
-        return this.field.getAnnotation(ForeignKeyAnnotation.class);
+    public @Nullable ForeignField getForeignKeyReference() {
+        return this.field.getAnnotation(ForeignField.class);
     }
 
     /**
@@ -94,10 +92,10 @@ public record RecordField(Record record, Field field) {
     /**
      * Used to check if the field has a field annotation.
      *
-     * @return True if the field has {@link RecordFieldAnnotation}
+     * @return True if the field has {@link Field}
      */
     public boolean hasFieldAnnotation() {
-        return this.field.isAnnotationPresent(RecordFieldAnnotation.class);
+        return this.field.isAnnotationPresent(Field.class);
     }
 
 
@@ -113,9 +111,9 @@ public record RecordField(Record record, Field field) {
     /**
      * Used to check if the field should be ignored.
      *
-     * @return True if the field has {@link RecordFieldIgnoreAnnotation}
+     * @return True if the field has {@link IgnoreField}
      */
     public boolean isIgnored() {
-        return this.field.isAnnotationPresent(RecordFieldIgnoreAnnotation.class);
+        return this.field.isAnnotationPresent(IgnoreField.class);
     }
 }
