@@ -19,8 +19,7 @@ public enum DatabaseFactory {
     }, MYSQL {
         @Override
         public @NotNull Database create(@NotNull DatabaseCredentials databaseCredentials) {
-            assert databaseCredentials.getPassword() != null;
-            return new MySQLDatabase(databaseCredentials.getConnectionString(), databaseCredentials.getDatabaseUser(), databaseCredentials.getPassword());
+            return new MySQLDatabase(databaseCredentials.getConnectionString());
         }
     }, MONGO {
         @Override

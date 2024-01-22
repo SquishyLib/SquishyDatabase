@@ -16,12 +16,9 @@ public class MySQLDatabase extends AbstractMySQLDatabase {
      * Used to create an abstract sql database.
      *
      * @param url      The instance of the url.
-     * @param user     The user that will be used to log into
-     *                 the database.
-     * @param password The user's password.
      */
-    public MySQLDatabase(@NotNull String url, @NotNull String user, @NotNull String password) {
-        super(url, user, password);
+    public MySQLDatabase(@NotNull String url) {
+        super(url);
     }
 
     @Override
@@ -34,7 +31,7 @@ public class MySQLDatabase extends AbstractMySQLDatabase {
 
     @Override
     public String getPrefix() {
-        return ConsoleColour.GRAY + "[MySql] " + ConsoleColour.GREEN;
+        return ConsoleColour.GRAY + "[MySQL] " + ConsoleColour.GREEN;
     }
 
     @Override

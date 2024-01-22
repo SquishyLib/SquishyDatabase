@@ -184,4 +184,11 @@ public class DatabaseCredentials {
 
         return credentials;
     }
+
+    public static DatabaseCredentials MYSQL(@NotNull String connectionString) {
+        DatabaseCredentials credentials = new DatabaseCredentials();
+        credentials.connectionString = connectionString;
+
+        return credentials;
+    }
 }

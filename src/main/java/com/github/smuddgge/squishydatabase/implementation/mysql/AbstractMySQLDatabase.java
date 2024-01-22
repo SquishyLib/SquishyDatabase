@@ -5,6 +5,7 @@ import com.github.smuddgge.squishydatabase.console.ConsoleColour;
 import com.github.smuddgge.squishydatabase.implementation.sqlite.SQLiteDatabase;
 import org.jetbrains.annotations.NotNull;
 
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -17,21 +18,14 @@ import java.sql.SQLException;
 public class AbstractMySQLDatabase extends SQLiteDatabase {
 
     protected final @NotNull String url;
-    protected final @NotNull String user;
-    protected final @NotNull String password;
 
     /**
      * Used to create an abstract sql database.
      *
      * @param url      The instance of the url.
-     * @param user     The user that will be used to log into
-     *                 the database.
-     * @param password The user's password.
      */
-    public AbstractMySQLDatabase(@NotNull String url, @NotNull String user, @NotNull String password) {
+    public AbstractMySQLDatabase(@NotNull String url) {
         this.url = url;
-        this.user = user;
-        this.password = password;
     }
 
     /**
@@ -40,7 +34,12 @@ public class AbstractMySQLDatabase extends SQLiteDatabase {
     public void createConnection() {
         try {
             // Create the connection.
-            this.connection = DriverManager.getConnection(this.url, this.user, this.password);
+            this.connection = DriverManager.getConnection(this.url);
+
+            // Check if the connection is null.
+            if (this.connection == null) {
+                this.setDisable();
+            }
 
         } catch (SQLException exception) {
             exception.printStackTrace();

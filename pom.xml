@@ -36,7 +36,7 @@
         <dependency>
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
-            <version>3.42.0.0</version>
+            <version>3.44.1.0</version>
         </dependency>
 
         <!-- Mongo DB -->
@@ -83,9 +83,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- Sqlite Driver. Use this is you don't have a driver for Sqlite. -->
-            <!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -106,7 +103,6 @@
                     </execution>
                 </executions>
             </plugin>
-            -->
         </plugins>
     </build>
 </project>
