@@ -5,7 +5,6 @@ import com.github.smuddgge.squishydatabase.console.ConsoleColour;
 import com.github.smuddgge.squishydatabase.implementation.sqlite.SQLiteDatabase;
 import org.jetbrains.annotations.NotNull;
 
-import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
@@ -18,14 +17,29 @@ import java.sql.SQLException;
 public class AbstractMySQLDatabase extends SQLiteDatabase {
 
     protected final @NotNull String url;
+    protected String username;
+    protected String password;
 
     /**
-     * Used to create an abstract sql database.
+     * Used to create an abstract my sql database.
      *
-     * @param url      The instance of the url.
+     * @param url The instance of the url.
      */
     public AbstractMySQLDatabase(@NotNull String url) {
         this.url = url;
+    }
+
+    /**
+     * Used to create an abstract my sql database.
+     *
+     * @param url      The instance of the url string.
+     * @param username The username to log into.
+     * @param password The password to log into.
+     */
+    public AbstractMySQLDatabase(@NotNull String url, @NotNull String username, @NotNull String password) {
+        this.url = url;
+        this.username = username;
+        this.password = password;
     }
 
     /**
@@ -33,8 +47,12 @@ public class AbstractMySQLDatabase extends SQLiteDatabase {
      */
     public void createConnection() {
         try {
-            // Create the connection.
-            this.connection = DriverManager.getConnection(this.url);
+            if (this.username == null) {
+                // Create the connection.
+                this.connection = DriverManager.getConnection(this.url);
+            } else {
+                this.connection = DriverManager.getConnection(this.url, this.username, this.password);
+            }
 
             // Check if the connection is null.
             if (this.connection == null) {
