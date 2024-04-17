@@ -8,7 +8,7 @@
 **Example**
 ```java
 // Create a database factory of your choice.
-DatabaseFactory databaseFactory=DatabaseFactory.SQLITE;
+DatabaseFactory databaseFactory = DatabaseFactory.SQLITE;
 
 // Make new databases using the factory.
 Database database = databaseFactory.create(
@@ -25,6 +25,15 @@ customer.identifier = UUID.randomUUID().toString();
 
 // Insert the record.
 customerTable.insertRecord(customer);
+```
+
+**Using the database builder**
+```java
+Database database = new DatabaseBuilder()
+    .setMongo(
+        "mongodb+srv://Vulengate_Main:TdrWwXipT7nVuops@vulengate-development.ncz9lbk.mongodb.net/?retryWrites=true&w=majority",
+        "DatabaseDevelopmentTesting")
+    .build();
 ```
 
 **Maven**

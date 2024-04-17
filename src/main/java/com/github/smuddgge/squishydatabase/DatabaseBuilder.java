@@ -266,7 +266,7 @@ public class DatabaseBuilder {
     }
 
     /**
-     * Used to build a connection to a database.
+     * Used to build a connection to a database and connect.
      *
      * @return The instance of the database.
      */
@@ -278,12 +278,12 @@ public class DatabaseBuilder {
                     "You must specify a connection string for a MySQL database."
             );
             if (this.username == null) {
-                return new MySQLDatabase(this.getConnectionString());
+                return new MySQLDatabase(this.getConnectionString()).setup();
             }
             if (this.password == null) throw new NullPointerException(
                     "You must specify a password for a MySQL database if you provide a username."
             );
-            return new MySQLDatabase(this.getConnectionString());
+            return new MySQLDatabase(this.getConnectionString()).setup();
         }
 
         // Check if the database type is MONGO.
@@ -294,7 +294,7 @@ public class DatabaseBuilder {
             if (this.getDatabaseName() == null) throw new NullPointerException(
                     "You must specify a database name for a Mongo database."
             );
-            return new MongoDatabase(this.getConnectionString(), this.getDatabaseName());
+            return new MongoDatabase(this.getConnectionString(), this.getDatabaseName()).setup();
         }
 
         // Check if the database type is SQLITE.
@@ -302,7 +302,7 @@ public class DatabaseBuilder {
             if (this.path == null) throw new NullPointerException(
                     "You must specify a path for a SQLite database."
             );
-            return new SQLiteDatabase(new File(this.path));
+            return new SQLiteDatabase(new File(this.path)).setup();
         }
 
         // Otherwise, the database type is invalid.
