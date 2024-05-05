@@ -44,8 +44,8 @@ public class DatabaseBuilder {
     public DatabaseBuilder(@NotNull ConfigurationSection section, @NotNull String path) {
         this.type = section.getString("type").toUpperCase();
         this.path = path;
-        this.connectionString = section.getString("connectionString");
-        this.databaseName = section.getString("databaseName");
+        this.connectionString = section.getString("connection_string");
+        this.databaseName = section.getString("database_name");
         this.username = section.getString("username");
         this.password = section.getString("password");
     }
