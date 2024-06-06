@@ -214,7 +214,7 @@ public abstract class AbstractSQLiteDatabase extends Database {
      * can be used in this database.
      */
     protected @Nullable String parseType(@NotNull Class<?> clazz) {
-        if (clazz.isAssignableFrom(String.class)) return "TEXT";
+        if (clazz.isAssignableFrom(String.class)) return "VARCHAR(255)";
         if (clazz.isAssignableFrom(Integer.class)) return "INTEGER";
         return null;
     }

@@ -185,9 +185,12 @@ public class DatabaseCredentials {
         return credentials;
     }
 
-    public static DatabaseCredentials MYSQL(@NotNull String connectionString) {
+    public static DatabaseCredentials MYSQL(@NotNull String connectionString, @NotNull String databaseName, @NotNull String username, @NotNull String password) {
         DatabaseCredentials credentials = new DatabaseCredentials();
         credentials.connectionString = connectionString;
+        credentials.databaseName = databaseName;
+        credentials.username = username;
+        credentials.password = password;
 
         return credentials;
     }

@@ -16,28 +16,17 @@ import java.sql.SQLException;
  */
 public class AbstractMySQLDatabase extends SQLiteDatabase {
 
-    protected final @NotNull String url;
-    protected String username;
-    protected String password;
+    protected final @NotNull String address;
+    protected final @NotNull String databaseName;
+    protected final @NotNull String username;
+    protected final @NotNull String password;
 
     /**
      * Used to create an abstract my sql database.
-     *
-     * @param url The instance of the url.
      */
-    public AbstractMySQLDatabase(@NotNull String url) {
-        this.url = url;
-    }
-
-    /**
-     * Used to create an abstract my sql database.
-     *
-     * @param url      The instance of the url string.
-     * @param username The username to log into.
-     * @param password The password to log into.
-     */
-    public AbstractMySQLDatabase(@NotNull String url, @NotNull String username, @NotNull String password) {
-        this.url = url;
+    public AbstractMySQLDatabase(@NotNull String address, @NotNull String databaseName, @NotNull String username, @NotNull String password) {
+        this.address = address;
+        this.databaseName = databaseName;
         this.username = username;
         this.password = password;
     }
@@ -47,17 +36,24 @@ public class AbstractMySQLDatabase extends SQLiteDatabase {
      */
     public void createConnection() {
         try {
-            if (this.username == null) {
-                // Create the connection.
-                this.connection = DriverManager.getConnection(this.url);
-            } else {
-                this.connection = DriverManager.getConnection(this.url, this.username, this.password);
-            }
 
-            // Check if the connection is null.
-            if (this.connection == null) {
-                this.setDisable();
-            }
+            // Connect to all databases.
+            this.connection = DriverManager.getConnection("jdbc:mysql://{address}/?user={username}&password={password}"
+                    .replace("{address}", this.address)
+                    .replace("{username}", this.username)
+                    .replace("{password}", this.password)
+            );
+
+            // Ensure database is created.
+            this.connection.createStatement().executeUpdate("CREATE DATABASE IF NOT EXISTS {name}".replace("{name}", this.databaseName));
+
+            // Connect to specific database.
+            this.connection = DriverManager.getConnection("jdbc:mysql://{address}/{database}"
+                            .replace("{address}", this.address)
+                            .replace("{database}", this.databaseName),
+                    this.username,
+                    this.password
+            );
 
         } catch (SQLException exception) {
             exception.printStackTrace();

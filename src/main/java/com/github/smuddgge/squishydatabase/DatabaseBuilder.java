@@ -277,13 +277,16 @@ public class DatabaseBuilder {
             if (this.getConnectionString() == null) throw new NullPointerException(
                     "You must specify a connection string for a MySQL database."
             );
-            if (this.username == null) {
-                return new MySQLDatabase(this.getConnectionString()).setup();
-            }
-            if (this.password == null) throw new NullPointerException(
-                    "You must specify a password for a MySQL database if you provide a username."
+            if (this.databaseName == null) throw new NullPointerException(
+                    "You must specify a database name for a MySQL database."
             );
-            return new MySQLDatabase(this.getConnectionString(), this.username, this.password).setup();
+            if (this.username == null) throw new NullPointerException(
+                    "You must specify a username for a MySQL database."
+            );
+            if (this.password == null) throw new NullPointerException(
+                    "You must specify a password for a MySQL database."
+            );
+            return new MySQLDatabase(this.getConnectionString(), this.databaseName, this.username, this.password).setup();
         }
 
         // Check if the database type is MONGO.

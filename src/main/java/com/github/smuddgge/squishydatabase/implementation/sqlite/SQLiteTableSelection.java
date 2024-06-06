@@ -148,8 +148,8 @@ public class SQLiteTableSelection<R extends Record>
             ResultSet resultSet = this.getDatabase().executeQuery(statement);
 
             if (resultSet == null) return 0;
-
-            return resultSet.getInt("amount");
+            if (resultSet.next()) return resultSet.getInt("amount");
+            return 0;
 
         } catch (SQLException exception) {
             exception.printStackTrace();
@@ -175,8 +175,8 @@ public class SQLiteTableSelection<R extends Record>
             ResultSet resultSet = this.getDatabase().executeQuery(preparedStatement);
 
             if (resultSet == null) return 0;
-
-            return resultSet.getInt("amount");
+            if (resultSet.next()) return resultSet.getInt("amount");
+            return 0;
 
         } catch (SQLException exception) {
             exception.printStackTrace();

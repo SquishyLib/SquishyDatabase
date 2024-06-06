@@ -15,21 +15,12 @@ public class MySQLDatabase extends AbstractMySQLDatabase {
     /**
      * Used to create a mysql database.
      *
-     * @param url      The instance of the url.
-     */
-    public MySQLDatabase(@NotNull String url) {
-        super(url);
-    }
-
-    /**
-     * Used to create a mysql database.
-     *
      * @param url The connection string.
      * @param username The username to log in with.
      * @param password The password to log in with.
      */
-    public MySQLDatabase(@NotNull String url, @NotNull String username, @NotNull String password) {
-        super(url, username, password);
+    public MySQLDatabase(@NotNull String url, @NotNull String databaseName, @NotNull String username, @NotNull String password) {
+        super(url, databaseName, username, password);
     }
 
     @Override
