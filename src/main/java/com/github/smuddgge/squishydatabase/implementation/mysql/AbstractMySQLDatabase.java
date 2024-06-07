@@ -36,6 +36,11 @@ public class AbstractMySQLDatabase extends SQLiteDatabase {
      */
     public void createConnection() {
         try {
+            try {
+                Class.forName("com.mysql.cj.jdbc.Driver");
+            } catch (ClassNotFoundException e) {
+                throw new RuntimeException(e);
+            }
 
             // Connect to all databases.
             this.connection = DriverManager.getConnection("jdbc:mysql://{address}/?user={username}&password={password}"
