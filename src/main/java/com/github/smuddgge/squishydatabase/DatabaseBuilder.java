@@ -23,12 +23,14 @@ import java.io.File;
  */
 public class DatabaseBuilder {
 
+    private ConfigurationSection section;
+
     private String type;
     private String path;
-    private String connectionString;
-    private String databaseName;
-    private String username;
-    private String password;
+
+    private ConfigurationSection sqliteConfiguration;
+    private ConfigurationSection mysqlConfiguration;
+    private ConfigurationSection mongoConfiguration;
 
     public DatabaseBuilder() {
     }
@@ -42,22 +44,37 @@ public class DatabaseBuilder {
      *                database connection.
      */
     public DatabaseBuilder(@NotNull ConfigurationSection section, @NotNull String path) {
-        this.type = section.getString("type").toUpperCase();
+        this.section = section;
+        this.type = section.getString("type");
         this.path = path;
-        this.connectionString = section.getString("connection_string");
-        this.databaseName = section.getString("database_name");
-        this.username = section.getString("username");
-        this.password = section.getString("password");
+
+        this.sqliteConfiguration = section.getSection("sqlite");
+        this.mysqlConfiguration = section.getSection("mysql");
+        this.mongoConfiguration = section.getSection("mongodb");
     }
 
     /**
      * Used to get the type of database as an
      * uppercase string.
+     * This will only return the type if the type identifier
+     * is used in the configuration.
      *
      * @return The type of database.
      */
     public @Nullable String getType() {
         return type;
+    }
+
+    public @NotNull ConfigurationSection getConfigurationSection() {
+        if (this.section.getKeys().contains("type")) return this.section;
+        if (this.sqliteConfiguration.getBoolean("enable")) return this.sqliteConfiguration;
+        if (this.mysqlConfiguration.getBoolean("enable")) return this.mysqlConfiguration;
+        if (this.mongoConfiguration.getBoolean("enable")) return this.mongoConfiguration;
+
+        throw new RuntimeException(
+                "Incorrect database configuration. " +
+                        "Ether no database sections are enabled or the type does not exist: " + this.getType() + "."
+        );
     }
 
     /**
@@ -67,7 +84,8 @@ public class DatabaseBuilder {
      * @return The path to the sqlite database.
      */
     public @Nullable String getPath() {
-        return path;
+        if (this.getType() != null) return this.path;
+        return this.getConfigurationSection().getString("path");
     }
 
     /**
@@ -79,7 +97,7 @@ public class DatabaseBuilder {
      * @return The connection string.
      */
     public @Nullable String getConnectionString() {
-        return connectionString;
+        return this.getConfigurationSection().getString("connection_string");
     }
 
     /**
@@ -90,7 +108,7 @@ public class DatabaseBuilder {
      * @return The database's name.
      */
     public @Nullable String getDatabaseName() {
-        return databaseName;
+        return this.getConfigurationSection().getString("database_name");
     }
 
     /**
@@ -102,7 +120,7 @@ public class DatabaseBuilder {
      * @return The database username.
      */
     public @Nullable String getUsername() {
-        return username;
+        return this.getConfigurationSection().getString("username");
     }
 
     /**
@@ -115,7 +133,7 @@ public class DatabaseBuilder {
      * @return The database password.
      */
     public @Nullable String getPassword() {
-        return password;
+        return this.getConfigurationSection().getString("password");
     }
 
     /**
@@ -126,7 +144,18 @@ public class DatabaseBuilder {
      * @return The instance of the database factory.
      */
     public @NotNull DatabaseFactory getFactory() {
-        return DatabaseFactory.valueOf(this.getType());
+        if (this.getType() == null) {
+            if (this.sqliteConfiguration.getBoolean("enable")) return DatabaseFactory.SQLITE;
+            if (this.mysqlConfiguration.getBoolean("enable")) return DatabaseFactory.MYSQL;
+            if (this.mongoConfiguration.getBoolean("enable")) return DatabaseFactory.MONGO;
+        } else {
+            return DatabaseFactory.valueOf(this.getType().toUpperCase());
+        }
+
+        throw new RuntimeException(
+                "Incorrect database configuration. " +
+                        "Ether no database sections are enabled or the type does not exist: " + this.getType() + "."
+        );
     }
 
     /**
@@ -165,7 +194,7 @@ public class DatabaseBuilder {
      * @return This instance.
      */
     public @NotNull DatabaseBuilder setConnectionString(@NotNull String connectionString) {
-        this.connectionString = connectionString;
+        this.section.set("connection_string", connectionString);
         return this;
     }
 
@@ -178,7 +207,7 @@ public class DatabaseBuilder {
      * @return This instance.
      */
     public @NotNull DatabaseBuilder setDatabaseName(@NotNull String databaseName) {
-        this.databaseName = databaseName;
+        this.section.set("database_name", databaseName);
         return this;
     }
 
@@ -192,7 +221,7 @@ public class DatabaseBuilder {
      * @return This instance.
      */
     public @NotNull DatabaseBuilder setUsername(@NotNull String username) {
-        this.username = username;
+        this.section.set("username", username);
         return this;
     }
 
@@ -207,7 +236,7 @@ public class DatabaseBuilder {
      * @return This instance.
      */
     public @NotNull DatabaseBuilder setPassword(@NotNull String password) {
-        this.password = password;
+        this.section.set("password", password);
         return this;
     }
 
@@ -231,7 +260,7 @@ public class DatabaseBuilder {
      */
     public @NotNull DatabaseBuilder setMySql(@NotNull String connectionString) {
         this.type = "MYSQL";
-        this.connectionString = connectionString;
+        this.section.set("connection_string", connectionString);
         return this;
     }
 
@@ -245,9 +274,9 @@ public class DatabaseBuilder {
      */
     public @NotNull DatabaseBuilder setMySql(@NotNull String connectionString, @NotNull String username, @NotNull String password) {
         this.type = "MYSQL";
-        this.connectionString = connectionString;
-        this.username = username;
-        this.password = password;
+        this.section.set("connection_string", connectionString);
+        this.section.set("username", username);
+        this.section.set("password", password);
         return this;
     }
 
@@ -260,8 +289,8 @@ public class DatabaseBuilder {
      */
     public @NotNull DatabaseBuilder setMongo(@NotNull String connectionString, @NotNull String databaseName) {
         this.type = "MONGO";
-        this.connectionString = connectionString;
-        this.databaseName = databaseName;
+        this.section.set("connection_string", connectionString);
+        this.section.set("database_name", databaseName);
         return this;
     }
 
@@ -277,16 +306,16 @@ public class DatabaseBuilder {
             if (this.getConnectionString() == null) throw new NullPointerException(
                     "You must specify a connection string for a MySQL database."
             );
-            if (this.databaseName == null) throw new NullPointerException(
+            if (this.getDatabaseName() == null) throw new NullPointerException(
                     "You must specify a database name for a MySQL database."
             );
-            if (this.username == null) throw new NullPointerException(
+            if (this.getUsername() == null) throw new NullPointerException(
                     "You must specify a username for a MySQL database."
             );
-            if (this.password == null) throw new NullPointerException(
+            if (this.getPassword() == null) throw new NullPointerException(
                     "You must specify a password for a MySQL database."
             );
-            return new MySQLDatabase(this.getConnectionString(), this.databaseName, this.username, this.password).setup();
+            return new MySQLDatabase(this.getConnectionString(), this.getDatabaseName(), this.getUsername(), this.getPassword()).setup();
         }
 
         // Check if the database type is MONGO.
@@ -302,10 +331,10 @@ public class DatabaseBuilder {
 
         // Check if the database type is SQLITE.
         if (this.getFactory().equals(DatabaseFactory.SQLITE)) {
-            if (this.path == null) throw new NullPointerException(
+            if (this.getPath() == null) throw new NullPointerException(
                     "You must specify a path for a SQLite database."
             );
-            return new SQLiteDatabase(new File(this.path)).setup();
+            return new SQLiteDatabase(new File(this.getPath())).setup();
         }
 
         // Otherwise, the database type is invalid.
