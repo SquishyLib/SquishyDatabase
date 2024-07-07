@@ -84,8 +84,7 @@ public class DatabaseBuilder {
      * @return The path to the sqlite database.
      */
     public @Nullable String getPath() {
-        if (this.getType() != null) return this.path;
-        return this.getConfigurationSection().getString("path");
+        return this.path;
     }
 
     /**
