@@ -43,7 +43,7 @@ public class AbstractMySQLDatabase extends SQLiteDatabase {
             }
 
             // Connect to all databases.
-            this.connection = DriverManager.getConnection("jdbc:mysql://{address}/?user={username}&password={password}?autoReconnect=true"
+            this.connection = DriverManager.getConnection("jdbc:mysql://{address}/?user={username}&password={password}"
                     .replace("{address}", this.address)
                     .replace("{username}", this.username)
                     .replace("{password}", this.password)
