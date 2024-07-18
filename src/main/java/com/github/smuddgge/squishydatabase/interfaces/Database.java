@@ -39,7 +39,7 @@ public abstract class Database {
 
     /**
      * Used to create a table in the database
-     * if it doesn't exists.
+     * if it doesn't exist.
      * This also links the table to the database which
      * lets you get the table from the database.
      *
@@ -119,8 +119,8 @@ public abstract class Database {
     /**
      * Used to disable the database.
      */
-    public Database setDisable() {
-        this.isDisabled = false;
+    public @NotNull Database setDisable(boolean isDisabled) {
+        this.isDisabled = isDisabled;
         return this;
     }
 
@@ -132,7 +132,7 @@ public abstract class Database {
      *                  be set to debug mode.
      * @return This instance of the database.
      */
-    public Database setDebugMode(boolean debugMode) {
+    public @NotNull Database setDebugMode(boolean debugMode) {
         this.isDebugMode = debugMode;
         return this;
     }

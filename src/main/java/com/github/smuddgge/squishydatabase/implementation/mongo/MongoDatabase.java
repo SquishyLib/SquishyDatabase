@@ -64,7 +64,7 @@ public class MongoDatabase extends AbstractMongoDatabase {
 
         } catch (Exception exception) {
             exception.printStackTrace();
-            this.setDisable();
+            this.setDisable(true);
             return false;
         }
     }

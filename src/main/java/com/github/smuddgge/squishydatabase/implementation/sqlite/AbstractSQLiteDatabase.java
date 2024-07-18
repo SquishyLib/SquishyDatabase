@@ -81,7 +81,7 @@ public abstract class AbstractSQLiteDatabase extends Database {
 
         } catch (SQLException exception) {
             exception.printStackTrace();
-            this.setDisable();
+            this.setDisable(true);
             return;
         }
 

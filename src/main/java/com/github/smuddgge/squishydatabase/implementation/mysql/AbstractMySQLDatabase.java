@@ -62,7 +62,7 @@ public class AbstractMySQLDatabase extends SQLiteDatabase {
 
         } catch (SQLException exception) {
             exception.printStackTrace();
-            this.setDisable();
+            this.setDisable(true);
             return;
         }
 

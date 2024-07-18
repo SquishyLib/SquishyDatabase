@@ -25,12 +25,16 @@ public abstract class AbstractMongoTableSelection<R extends Record>
      */
     protected MongoCollection<Document> getCollection() {
         try {
+
             assert this.getDatabase() != null;
             return this.getDatabase().getDatabase().getCollection(this.getName());
 
         } catch (Exception exception) {
             exception.printStackTrace();
-            if (this.getDatabase() != null) this.getDatabase().setDisable();
+
+            if (this.getDatabase() != null) {
+                this.getDatabase().setDisable(true);
+            }
             return null;
         }
     }
