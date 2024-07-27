@@ -48,7 +48,7 @@ public class SQLiteTableSelection<R extends Record>
 
         try {
 
-            // Build the statement
+            // Build the statement.
             String statement = "SELECT * FROM " + this.getName() + " WHERE " +
                     this.buildWhereStatement(query) + " LIMIT 1;";
 
